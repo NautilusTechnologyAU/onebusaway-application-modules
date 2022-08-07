@@ -3,18 +3,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'mvn -B -DskipTests clean install'
+        sh 'mvn package -Ptravis -Dmaven.javadoc.skip=true -Dvalidate.silent=true -Dlog4j.configuration= -B -V -q'
       }
-    }
-    stage('Test') {
-      steps {
-        sh 'mvn test' 
-      }
-      post {
-        always {
-          junit 'target/surefire-reports/*.xml' 
-        }
-      }
-    }
+    }    
   }
 }
