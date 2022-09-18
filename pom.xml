@@ -72,9 +72,9 @@
   </repositories>
 
   <scm>
-    <connection>scm:git:git@github.com:camsys/onebusaway-application-modules.git</connection>
-    <developerConnection>scm:git:git@github.com:camsys/onebusaway-application-modules.git</developerConnection>
-    <url>scm:git:git@github.com:camsys/onebusaway-application-modules</url>
+    <connection>scm:git@github.com:nautilustechnologyau/onebusaway-application-modules.git</connection>
+    <developerConnection>scm:git@github.com:nautilustechnologyau/onebusaway-application-modules.git</developerConnection>
+    <url>scm:git@github.com:nautilustechnologyau/onebusaway-application-modules.git</url>
     <tag>onebusaway-application-modules-2.1.0</tag>
   </scm>
 
