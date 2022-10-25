@@ -22,9 +22,9 @@
           xmlns:wiki="/oba-wiki-tags">
   <jsp:directive.page contentType="application/xml" />
   <Gather numDigits="1">
-    <Say>
+    <Play>
       ${message}
-    </Say>
+    </Play>
     <Pause length="1">
     </Pause>
   </Gather>

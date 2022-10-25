@@ -21,8 +21,8 @@
      xmlns:wiki="/oba-wiki-tags">
   <jsp:directive.page contentType="application/xml" />
   <Gather numDigits="1" action="/onebusaway-twilio-webapp/bookmarks/bookmark-stop.action">
-    <Say>
+    <Play>
         ${message}
-    </Say>
+    </Play>
   </Gather>
 </Response>

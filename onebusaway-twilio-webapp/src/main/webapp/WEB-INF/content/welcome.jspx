@@ -21,8 +21,8 @@
      xmlns:wiki="/oba-wiki-tags">
   <jsp:directive.page contentType="application/xml" />
   <Gather numDigits="1">
-    <Say>
-    	Where is your bus... let's find out.  If you are a first time user, or need help, please press zero.
-    </Say>
+    <Play>
+      ${message}
+    </Play>
   </Gather>
 </Response>

@@ -22,9 +22,9 @@
      xmlns:wiki="/oba-wiki-tags">
 <jsp:directive.page contentType="application/xml" />
   <Gather numDigits="1">
-    <Say>
+    <Play>
       ${message}
-    </Say>
+    </Play>
     <Say>
     	To repeat this message, please press  8.
     	If you wish to return to the previous menu, please press star.

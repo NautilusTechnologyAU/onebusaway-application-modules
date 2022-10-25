@@ -67,6 +67,7 @@ public class MessageAndBackAction extends TwilioSupport implements SessionAware 
 			String message = (String)sessionMap.get("messageFromAction");
 			_log.debug("message: " + message);
 			addMessage(message);
+		    addMessage(Messages.HOW_TO_GO_BACK);
 			sessionMap.put("navState", DO_ROUTING);
       return SUCCESS;
     } else {	// Process input and route to the appropriate action.

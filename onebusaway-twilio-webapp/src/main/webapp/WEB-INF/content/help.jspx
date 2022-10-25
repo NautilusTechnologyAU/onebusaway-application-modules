@@ -21,7 +21,7 @@
      xmlns:wiki="/oba-wiki-tags">
   <jsp:directive.page contentType="application/xml" />
   <Gather numDigits="1">
-    <Say>
+    <Play>
     	Welcome.  Our system let's you access real-time bus arrival information over the phone.  When you first call the system, you are asked to enter your stop number, followed by the pound sign.  Once you've entered your stop number, this system will list scheduled bus arrivals and departures at your stop.
 		To enter a stop number, please press one.
 		For help finding your stop number, please press two.
@@ -30,7 +30,7 @@
 		To check your most recent stop, please press five.
 		To search for a stop by route number, please press six.
 		To adjust your personal settings, please press seven.
-		If you need help, please press zero.	
-    </Say>
+		If you need help, please press zero.
+    </Play>
   </Gather>
 </Response>
