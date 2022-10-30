@@ -19,7 +19,7 @@
           xmlns:c="http://java.sun.com/jsp/jstl/core"
           xmlns:s="/struts-tags"
           xmlns:wiki="/oba-wiki-tags">
-    <jsp:directive.page contentType="application/xml" />
+    <jsp:directive.page contentType="application/xml"/>
     <Gather numDigits="1">
         <Play>
             ${message}

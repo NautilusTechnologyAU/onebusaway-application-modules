@@ -60,6 +60,7 @@ public class TwilioSupport extends ActionSupport implements ParameterAware, Curr
   private StringBuffer _message = new StringBuffer();
   protected UserBean _currentUser;
   protected Map sessionMap;
+  protected String _azureCognitiveServiceUrl = System.getProperty("AZURE_COGNITIVE_SERVICE_URL");
 
   @Autowired
   private ConfigurationServiceClient _configurationServiceClient;
@@ -78,20 +79,34 @@ public class TwilioSupport extends ActionSupport implements ParameterAware, Curr
     _message.delete(0, _message.length());
   }
 
-  protected void addMessage(String msg, Object... args) {
+  protected String getLocalisedText(String msg, Object... args) {
     ActionContext context = ActionContext.getContext();
     Locale locale = context.getLocale();
     ValueStack valueStack = context.getValueStack();
-    String text = new StrutsLocalizedTextProvider().findText(TwilioSupport.this.getClass(), msg, locale, msg, args, valueStack);
+    return new StrutsLocalizedTextProvider().findText(TwilioSupport.this.getClass(), msg, locale, msg, args, valueStack);
+  }
+
+  protected void addMessage(String msg, Object... args) {
+    String text = getLocalisedText(msg, args);
     _log.debug("message: " + text);
     _message.append(" " + text + " ");
     _log.debug(getText(msg));
   }
 
+  public String stringToSpeechUrl(String message) throws Exception {
+    if (_azureCognitiveServiceUrl == null || _azureCognitiveServiceUrl.isEmpty()) {
+      _azureCognitiveServiceUrl = _configurationServiceClient.getItem(null, "textToSpeechServiceUrl");
+    }
+    String messageUrl = URLEncoder.encode(message, StandardCharsets.UTF_8);
+    return String.format("%s?text=%s", _azureCognitiveServiceUrl, messageUrl);
+  }
+
   public String getMessage() throws Exception {
-    String url = _configurationServiceClient.getItem(null, "textToSpeechServiceUrl");
-    String message = URLEncoder.encode(_message.toString(), StandardCharsets.UTF_8);
-    return String.format("%s?text=%s", url, message);
+    return stringToSpeechUrl(_message.toString());
+  }
+
+  public String getLocalisedMessage(String messageKey) throws Exception {
+    return stringToSpeechUrl(getLocalisedText(messageKey));
   }
 
   @Autowired

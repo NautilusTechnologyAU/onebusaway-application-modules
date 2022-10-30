@@ -22,7 +22,6 @@ import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.SessionAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Results({
         @Result(name = "registration", location = "registration", type = "redirectAction"),
@@ -45,11 +44,6 @@ public class IndexAction extends TwilioSupport implements SessionAware {
     private String from;
 
     private Map sessionMap;
-
-    @Autowired
-    public IndexAction() {
-        addMessage(Messages.INDEX_HELP);
-    }
 
     public void setDigits(String digits) {
         this.digits = digits;

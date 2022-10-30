@@ -15,8 +15,6 @@
  */
 package org.onebusaway.twilio.actions;
 
-import java.util.Map;
-
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.SessionAware;
@@ -24,6 +22,8 @@ import org.onebusaway.users.services.CurrentUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Map;
 
 @Results({
         @Result(name = "registration", location = "/registration", type = "chain"),
@@ -44,11 +44,6 @@ public class WelcomeAction extends TwilioSupport implements SessionAware {
 
     private CurrentUserService _currentUserService;
     private Map sessionMap;
-
-    @Autowired
-    public WelcomeAction() {
-        addMessage(Messages.WELCOME_ACTION);
-    }
 
     @Autowired
     public void setCurrentUserService(CurrentUserService currentUserService) {
