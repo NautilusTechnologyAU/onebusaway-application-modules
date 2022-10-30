@@ -16,9 +16,14 @@ env:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
       packages: write
+
+    outputs:
+      image_tag: ${{ steps.set_image_tag.outputs.image_tag }}
+
     steps:
       - uses: actions/checkout@v3
 
