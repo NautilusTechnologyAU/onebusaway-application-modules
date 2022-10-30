@@ -131,15 +131,15 @@ jobs:
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           name: ${{ env.TWILIO_APP_NAME }}
           ports: ${{ env.SERVER_PORT }}
-          environment-variables: |
-            SERVER_PORT=${{ env.SERVER_PORT }} \
-            AZURE_COGNITIVE_SERVICE_URL=${{ secrets.AZURE_COGNITIVE_SERVICE_URL }} \
-            TRANSIT_DATA_SERVICE_URL=${{ secrets.TRANSIT_DATA_SERVICE_URL }} \
-            DATABASE_HOST=${{ secrets.TRANSIT_DATABASE_HOST }} \
-            DATABASE_PORT=${{ secrets.TRANSIT_DATABASE_PORT }} \
-            DATABASE_NAME=${{ secrets.TRANSIT_DATABASE_NAME }} \
-            DATABASE_USER=${{ secrets.TRANSIT_DATABASE_USER }} \
-            DATABASE_PASSWORD=${{ secrets.TRANSIT_DATABASE_PASSWORD }}"
+          environment-variables: >
+            SERVER_PORT=${{ env.SERVER_PORT }}
+            AZURE_COGNITIVE_SERVICE_URL=${{ secrets.AZURE_COGNITIVE_SERVICE_URL }}
+            TRANSIT_DATA_SERVICE_URL=${{ secrets.TRANSIT_DATA_SERVICE_URL }}
+            DATABASE_HOST=${{ secrets.TRANSIT_DATABASE_HOST }}
+            DATABASE_PORT=${{ secrets.TRANSIT_DATABASE_PORT }}
+            DATABASE_NAME=${{ secrets.TRANSIT_DATABASE_NAME }}
+            DATABASE_USER=${{ secrets.TRANSIT_DATABASE_USER }}
+            DATABASE_PASSWORD=${{ secrets.TRANSIT_DATABASE_PASSWORD }}
           location: ${{ env.LOCATION }}
           cpu: 1
           memory: 2
