@@ -61,11 +61,20 @@ public class AbstractTextmarksAction extends NextActionSupport {
       _text = message.trim();
   }
 
+  public void setBody(String body) {
+    if (_text == null)
+      _text = body.trim();
+  }
+
   public void setText(String text) {
     _text = text;
   }
 
   public String getText() {
     return _text;
+  }
+
+  public String getBrandingInfo() {
+    return System.lineSeparator() + System.lineSeparator() + "Powered by Nautilus Technology. Visit https://transit.nautilus-tech.com.au for more information";
   }
 }

@@ -16,11 +16,13 @@
 package org.onebusaway.sms.impl;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.interceptor.SessionAware;
 import org.onebusaway.presentation.impl.users.XWorkRequestAttributes;
+import org.onebusaway.sms.actions.sms.AbstractTextmarksAction;
 import org.onebusaway.sms.services.SessionManager;
 import org.onebusaway.util.impl.analytics.GoogleAnalyticsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,9 @@ public class TextmarksSessionInterceptor extends AbstractInterceptor {
 
   private SessionManager _sessionManager;
 
-  private String _phoneNumberParameterName = "phoneNumber";
+  private String _phoneNumberParameterName = "From";
+
+  private String _messageParameterName = "Body";
 
   @Autowired
   public void setSessionManager(SessionManager sessionManager) {
@@ -51,6 +55,10 @@ public class TextmarksSessionInterceptor extends AbstractInterceptor {
 
   public void setPhoneNumberParameterName(String phoneNumberParameterName) {
     _phoneNumberParameterName = phoneNumberParameterName;
+  }
+
+  public void setMessageParameterName(String messageParameterName) {
+    _messageParameterName = messageParameterName;
   }
 
   @Override
@@ -90,6 +98,10 @@ public class TextmarksSessionInterceptor extends AbstractInterceptor {
     Object action = invocation.getAction();
     if (action instanceof SessionAware)
       ((SessionAware) action).setSession(persistentSession);
+
+    Object message = parameters.get(_messageParameterName);
+    if (action instanceof AbstractTextmarksAction)
+      ((AbstractTextmarksAction) action).setMessage(message == null ? "#help" : message.toString().toLowerCase(Locale.getDefault()));
 
     try {
       return invocation.invoke();

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright (C) 2011 Brian Ferris <bdferris@onebusaway.org>
@@ -16,30 +15,24 @@
     limitations under the License.
 
 -->
-<html xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:s="/struts-tags">
-<jsp:directive.page contentType="text/html" />
-<head>
-</head>
-<body>
-
-<div id="content">
-<div class="panel">
-
-<s:push value="exception">
-
-  <s:if test="fieldName == 'entityId'">
-    <h3 class="warning">We couldn't parse that id.</h3>
-  </s:if>
-  <s:else>
-    <h3 class="warning">Something went wrong:</h3>
-    <div>fieldName=<s:property value="fieldName"/></div>
-    <div>errorMessage=<s:property value="errorMessage"/></div>
-  </s:else>
-
-</s:push>
-
-</div>
-</div>
-
-</body>
-</html>
+<Response xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:s="/struts-tags"
+          xmlns:oba="/oba-tags">
+    <jsp:directive.page contentType="application/xml"/>
+    <Message>
+        <Body>
+            <s:push value="exception">
+                <s:if test="fieldName == 'entityId'">
+                    We couldn't parse that id.<s:property value="newline()"/>
+                </s:if>
+                <s:else>
+                    Something went wrong:<s:property value="newline()"/>
+                    fieldName=<s:property value="fieldName"/><s:property value="newline()"/>
+                    errorMessage=<s:property value="errorMessage"/><s:property value="newline()"/>
+                </s:else>
+            </s:push>
+            <s:property value="getBrandingInfo()"/>
+        </Body>
+    </Message>
+</Response>

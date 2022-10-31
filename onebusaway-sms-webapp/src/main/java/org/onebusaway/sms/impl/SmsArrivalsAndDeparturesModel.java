@@ -67,4 +67,8 @@ public class SmsArrivalsAndDeparturesModel extends ArrivalsAndDeparturesModel {
       return destination;
     return _abbreviations.modify(destination);
   }
+
+  public String newline() {
+    return System.lineSeparator();
+  }
 }

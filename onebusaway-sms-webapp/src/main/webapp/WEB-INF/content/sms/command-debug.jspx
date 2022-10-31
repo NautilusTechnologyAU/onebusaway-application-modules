@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright (C) 2011 Brian Ferris <bdferris@onebusaway.org>
@@ -16,28 +15,20 @@
     limitations under the License.
 
 -->
-<html xmlns:jsp="http://java.sun.com/JSP/Page"
-	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:s="/struts-tags"
-	xmlns:oba="/oba-tags">
-<jsp:directive.page contentType="text/html" />
-<head>
-<title>Debug</title>
-</head>
-<body>
-
-<div class="section">
-  <h4>Details</h4>
-  <ul>
-    <li><span class="label">User #:</span> <s:property value="model.userId"/></li>
-    <li><span class="label">User Indices:</span>
-      <ul>
-      <s:iterator value="model.indices">
-        <li><span class="label"><s:property value="type"/>:</span> <s:property value="value"/></li>
-      </s:iterator>
-      </ul>
-    </li>
-  </ul>
-</div>
-	
-</body>
-</html>
+<Response xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:s="/struts-tags"
+          xmlns:oba="/oba-tags">
+    <jsp:directive.page contentType="application/xml"/>
+    <Message>
+        <Body>
+            Details<s:property value="newline()"/>
+            <jsp:text>    </jsp:text>User #: <s:property value="model.userId"/><s:property value="newline()"/>
+            <jsp:text>    </jsp:text>User Indices:
+            <s:iterator value="model.indices">
+                <jsp:text>        </jsp:text>-<s:property value="type"/>: <s:property value="value"/>
+            </s:iterator>
+            <s:property value="getBrandingInfo()"/>
+        </Body>
+    </Message>
+</Response>
