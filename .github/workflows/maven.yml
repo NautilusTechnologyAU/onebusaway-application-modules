@@ -256,6 +256,7 @@ jobs:
             DATABASE_NAME=${{ secrets.TRANSIT_DATABASE_NAME }}
             DATABASE_USER=${{ secrets.TRANSIT_DATABASE_USER }}
             DATABASE_PASSWORD=${{ secrets.TRANSIT_DATABASE_PASSWORD }}
+            APP_HOST_NAME=${{ env.ADMIN_APP_NAME }}-dev.australiaeast.azurecontainer.io:${{ env.SERVER_PORT }}
             SERVER_URL=http://${{ env.ADMIN_APP_NAME }}-dev.australiaeast.azurecontainer.io:${{ env.SERVER_PORT }}
             GOOGLE_MAPS_API_KEY=${{ secrets.TRANSIT_GOOGLE_MAPS_API_KEY }}
             ADMIN_PASSWORD=${{ secrets.TRANSIT_ADMIN_PASSWORD }}

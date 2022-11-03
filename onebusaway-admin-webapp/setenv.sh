@@ -15,6 +15,7 @@ sed -i 's/${DATABASE_USER}/'"$DATABASE_USER"'/g' ${CATALINA_HOME}/conf/context.x
 sed -i 's/${DATABASE_PASSWORD}/'"$DATABASE_PASSWORD"'/g' ${CATALINA_HOME}/conf/context.xml
 
 sed -i 's/${GOOGLE_MAPS_API_KEY}/'"$GOOGLE_MAPS_API_KEY"'/g' /oba/config.json
+sed -i 's/${APP_HOST_NAME}/'"$APP_HOST_NAME"'/g' /oba/config.json
 
 sed -i 's/${ADMIN_PASSWORD}/'"$ADMIN_PASSWORD"'/g' ${APP_PATH}/WEB-INF/classes/org/onebusaway/admin/webapp/application-context-webapp.xml
 sed -i 's/${OPERATOR_PASSWORD}/'"$OPERATOR_PASSWORD"'/g' ${APP_PATH}/WEB-INF/classes/org/onebusaway/admin/webapp/application-context-webapp.xml

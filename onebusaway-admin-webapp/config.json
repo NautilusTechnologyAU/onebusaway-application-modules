@@ -4,6 +4,7 @@
     "config": "local"
   },
   "config": [
+    {"component": "admin", "key": "appHostname", "value": "${APP_HOST_NAME}"},
     {"component": "admin", "key": "useTdm", "value": "false"},
     {"component": "admin", "key": "admin.auxSupport", "value": "false"},
     {"component": "admin", "key": "admin.stopConsolidation", "value": "true"},

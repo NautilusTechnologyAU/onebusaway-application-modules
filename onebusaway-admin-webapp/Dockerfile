@@ -24,6 +24,7 @@ LABEL org.opencontainers.image.title='OneBusAway Admin App' \
       help="For more information contact Nautilus Technology Dev Team <dev@nautilus-tech.com.au>"
 
 ENV APP_PATH='/oba/tomcat/webapps/onebusaway-admin-webapp'
+ENV APP_HOST_NAME='localhost'
 ENV SERVER_URL='http://localhost:8080'
 ENV GOOGLE_MAPS_API_KEY=''
 ENV ADMIN_PASSWORD='admin123'
