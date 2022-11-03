@@ -1,0 +1,26 @@
+{
+  "oba": {
+    "env": "local",
+    "config": "local"
+  },
+  "config": [
+    {"component": "admin", "key": "useTdm", "value": "false"},
+    {"component": "admin", "key": "admin.auxSupport", "value": "false"},
+    {"component": "admin", "key": "admin.stopConsolidation", "value": "true"},
+    {"component": "admin", "key": "admin.instanceId", "value": "localhost"},
+    {"component": "admin", "key": "bundleStagingDir", "value": "/oba/bundles/staged"},
+    {"component": "admin", "key": "showApiKey", "value": "true"},
+    {"component": "admin", "key": "showManageUsers", "value": "true"},
+    {"component": "admin", "key": "showBundleUtil", "value": "true"},
+    {"component": "admin", "key": "showVehicleStatus", "value": "false"},
+    {"component": "admin", "key": "showUpdateConfig", "value": "false"},
+    {"component": "admin", "key": "showQrCode", "value": "false"},
+    {"component": "admin", "key": "showVehiclePredictions", "value": "false"},
+    {"component": "admin", "key": "manageServiceAlerts", "value": "true"},
+    {"component": "admin", "key": "validateTransitDataBundle", "value": "false"},
+    {"component": "admin", "key": "no_default_agency", "value": "true"},
+    {"component": "admin", "key": "Hillsborough Area Regional Transit_modurl", "value": "https://raw.github.com/wiki/camsys/onebusaway-application-modules/EmptyModifications.md"},
+    {"component": "privilege", "key": "ROLE_ADMINISTRATOR", "value": "*"},
+    {"component": "display", "key": "display.googleMapsApiKey", "value": "${GOOGLE_MAPS_API_KEY}"}
+  ]
+}
