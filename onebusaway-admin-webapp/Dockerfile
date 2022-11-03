@@ -49,4 +49,5 @@ RUN jar -xvf onebusaway-admin-webapp.war && \
     rm onebusaway-admin-webapp.war && \
     ln -s /oba/tomcat/webapps/onebusaway-admin-webapp ${CATALINA_HOME}/webapps/ROOT && \
     mkdir -p /oba/bundles/staged && \
-    mkdir -p /oba/bundles/builder
+    mkdir -p /oba/bundles/builder && \
+    curl https://repo1.maven.org/maven2/javax/mail/mail/1.4.7/mail-1.4.7.jar -o ${CATALINA_HOME}/lib/mail.jar
