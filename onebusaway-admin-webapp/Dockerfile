@@ -12,18 +12,19 @@ FROM ${BASE_REGISTRY}/${BASE_IMAGE}:${BASE_TAG}
 # Container metadata
 ARG VERSION
 ENV DESCRIPTION='OneBusAway Admin App'
+ENV APP_NAME='onebusaway-admin-webapp'
 
 LABEL org.opencontainers.image.title='OneBusAway Admin App' \
       org.opencontainers.image.description="${DESCRIPTION}" \
       org.opencontainers.image.authors='Nautilus Technology Dev Team <dev@nautilus-tech.com.au>' \
-      org.opencontainers.image.source='https://github.com/nautilustechnologyau/onebusaway-application-modules/tree/master/onebusaway-admin-webapp' \
-      org.opencontainers.image.url="nautilustechregistry.azurecr.io/nautilustechnologyau/transit/onebusaway-admin-webapp:${VERSION}" \
+      org.opencontainers.image.source="https://github.com/nautilustechnologyau/onebusaway-application-modules/tree/master/${APP_NAME}" \
+      org.opencontainers.image.url="nautilustechregistry.azurecr.io/nautilustechnologyau/transit/${APP_NAME}:${VERSION}" \
       org.opencontainers.image.vendor='Nautilus Technology (https://nautilus-tech.com.au)' \
       org.opencontainers.image.licenses='MIT' \
       org.opencontainers.image.version="${VERSION}" \
       help="For more information contact Nautilus Technology Dev Team <dev@nautilus-tech.com.au>"
 
-ENV APP_PATH='/oba/tomcat/webapps/onebusaway-admin-webapp'
+ENV APP_PATH="/oba/tomcat/webapps/${APP_NAME}"
 ENV APP_HOST_NAME='localhost'
 ENV SERVER_URL='http://localhost:8080'
 ENV GOOGLE_MAPS_API_KEY=''
@@ -35,10 +36,10 @@ ENV DATABASE_PORT=3306
 ENV DATABASE_NAME='oba'
 ENV DATABASE_USER='oba'
 ENV DATABASE_PASSWORD='oba'
-ENV JAVA_OPTS='-Xss4m'
+ENV JAVA_OPTS='-Xss4m -Duser.language=en -Duser.country=AU'
 
 # Copy the application files
-ADD './target/onebusaway-admin-webapp.war' ${APP_PATH}/onebusaway-admin-webapp.war
+ADD "./target/${APP_NAME}.war" ${APP_PATH}/${APP_NAME}.war
 ADD './config.json' /oba/config.json
 ADD './setenv.sh' ${CATALINA_HOME}/bin/setenv.sh
 ADD './context.xml' ${CATALINA_HOME}/conf/context.xml
@@ -46,9 +47,9 @@ ADD './context.xml' ${CATALINA_HOME}/conf/context.xml
 WORKDIR ${APP_PATH}
 
 # Extract the war file and create symbolic link in Tomcat webapps
-RUN jar -xvf onebusaway-admin-webapp.war && \
-    rm onebusaway-admin-webapp.war && \
-    ln -s /oba/tomcat/webapps/onebusaway-admin-webapp ${CATALINA_HOME}/webapps/ROOT && \
+RUN jar -xvf ${APP_NAME}.war && \
+    rm ${APP_NAME}.war && \
+    ln -s /oba/tomcat/webapps/${APP_NAME} ${CATALINA_HOME}/webapps/ROOT && \
     mkdir -p /oba/bundles/staged && \
     mkdir -p /oba/bundles/builder && \
     curl https://repo1.maven.org/maven2/javax/mail/mail/1.4.7/mail-1.4.7.jar -o ${CATALINA_HOME}/lib/mail.jar && \
