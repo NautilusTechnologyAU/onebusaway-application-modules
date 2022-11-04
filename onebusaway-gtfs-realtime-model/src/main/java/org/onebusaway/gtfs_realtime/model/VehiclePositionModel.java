@@ -69,10 +69,14 @@ public class VehiclePositionModel implements FeedEntityModel, HasTripId, HasRout
   private Float bearing;
   @Column(nullable = true, name = "speed")
   private Float speed;
+  @Column(nullable = true, name = "odometer")
+  private Double odometer;
   @Column(nullable = true, name = "stop_id", length = 20)
   private String stopId;
   @Column(nullable = true, name = "timestamp")
   private Date timestamp;
+  @Column(nullable = true, name = "congestion_level")
+  private String congestionLevel;
 
   public long getId() {
     return id;
@@ -161,7 +165,13 @@ public class VehiclePositionModel implements FeedEntityModel, HasTripId, HasRout
   public void setSpeed(Float speed) {
     this.speed = speed;
   }
+  public Double getOdometer() {
+    return odometer;
+  }
 
+  public void setOdometer(Double speed) {
+    this.odometer = odometer;
+  }
   public String getStopId() {
     return stopId;
   }
@@ -181,5 +191,13 @@ public class VehiclePositionModel implements FeedEntityModel, HasTripId, HasRout
   public String toString() {
     return "{vehicleId=" + vehicleId + " (" + lat + ", " + lon + ")" + " @"
         + timestamp + "}";
+  }
+
+  public String getCongestionLevel() {
+    return congestionLevel;
+  }
+
+  public void setCongestionLevel(String congestionLevel) {
+    this.congestionLevel = congestionLevel;
   }
 }

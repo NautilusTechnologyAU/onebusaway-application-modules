@@ -16,7 +16,7 @@
 
   <!-- Common Software Dependency Versions -->
   <properties>
-    <project-version>2.1.8</project-version>
+    <project-version>2.1.9</project-version>
     <project.scm.id>github</project.scm.id>
     <asm-version>8.0.1</asm-version>
     <struts-version>2.5.26</struts-version>
