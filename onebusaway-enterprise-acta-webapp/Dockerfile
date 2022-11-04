@@ -34,6 +34,8 @@ ENV DATABASE_NAME='oba'
 ENV DATABASE_USER='oba'
 ENV DATABASE_PASSWORD='oba'
 ENV JAVA_OPTS='-Xss4m -Duser.language=en -Duser.country=AU'
+ENV LANG="en_AU.UTF-8"
+ENV LANGUAGE="en_AU:en"
 
 # Copy the application files
 ADD "./target/${APP_NAME}.war" ${APP_PATH}/${APP_NAME}.war
@@ -47,5 +49,5 @@ RUN jar -xvf ${APP_NAME}.war && \
     rm ${APP_NAME}.war && \
     ln -s /oba/tomcat/webapps/${APP_NAME} ${CATALINA_HOME}/webapps/ROOT && \
     curl https://repo1.maven.org/maven2/javax/mail/mail/1.4.7/mail-1.4.7.jar -o ${CATALINA_HOME}/lib/mail.jar && \
-    locale-gen en_AU.UTF-8 && \
-    update-locale LANG=en_AU.UTF-8
+    locale-gen ${LANG} && \
+    update-locale LANG="${LANG}" LANGUAGE="${LANGUAGE}"
