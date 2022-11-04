@@ -42,5 +42,6 @@ WORKDIR /oba/tomcat/webapps/onebusaway-twilio-webapp
 # Extract the war file and create symbolic link in Tomcat webapps
 RUN jar -xvf onebusaway-twilio-webapp.war && \
     rm onebusaway-twilio-webapp.war && \
-    ln -s /oba/tomcat/webapps/onebusaway-twilio-webapp ${CATALINA_HOME}/webapps/ROOT
-
+    ln -s /oba/tomcat/webapps/onebusaway-twilio-webapp ${CATALINA_HOME}/webapps/ROOT && \
+    locale-gen en_AU.UTF-8 && \
+    update-locale LANG=en_AU.UTF-8

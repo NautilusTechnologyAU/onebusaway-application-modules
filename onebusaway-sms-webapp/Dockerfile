@@ -41,5 +41,7 @@ WORKDIR /oba/tomcat/webapps/onebusaway-sms-webapp
 # Extract the war file and create symbolic link in Tomcat webapps
 RUN jar -xvf onebusaway-sms-webapp.war && \
     rm onebusaway-sms-webapp.war && \
-    ln -s /oba/tomcat/webapps/onebusaway-sms-webapp ${CATALINA_HOME}/webapps/ROOT
+    ln -s /oba/tomcat/webapps/onebusaway-sms-webapp ${CATALINA_HOME}/webapps/ROOT && \
+    locale-gen en_AU.UTF-8 && \
+    update-locale LANG=en_AU.UTF-8
 
