@@ -135,7 +135,7 @@
 					<li style="width: 15%; border-left: none;"><a href="/">Home</a></li>
 
 					<s:url var="url" namespace="/m" action="index"/>
-					<li style="width: 17%;" id="link_mobile" aria-label="Text only version"><a href="${url}">Text / Mobile</a></li>
+					<li style="width: 17%;" aria-label="Text only version"><a href="${url}">Text / Mobile</a></li>
 
 					<li style="width: 17%;"><a href="/routes">Routes</a></li>
 
@@ -143,7 +143,7 @@
 
 					<li style="width: 17%;"><a target="_blank" href="https://onebusaway.org/">OneBusAway</a></li>
 
-					<li style="width: 17%;"><a target="_blank" href="https://nautilus-tech.com.au/">About Us</a></li>
+					<li style="width: 17%; position: absolute; margin-left: -3px;"><a target="_blank" href="https://nautilus-tech.com.au/">About Us</a></li>
 				</ul>
 		   </div>
 	    

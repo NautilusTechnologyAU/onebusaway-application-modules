@@ -4,6 +4,10 @@
     "config": "local"
   },
   "config": [
-    {"component": "display", "key": "display.googleMapsApiKey", "value": "${GOOGLE_MAPS_API_KEY}"}
+    {"component": "display", "key": "display.obaApiKey", "value": "${API_KEY}"},
+    {"component": "display", "key": "display.siriBaseUrl", "value": "${SIRI_BASE_URL}"},
+    {"component": "display", "key": "display.googleMapsApiKey", "value": "${GOOGLE_MAPS_API_KEY}"},
+    {"component": "display", "key": "display.apiBaseUrl", "value": "${API_BASE_URL}"}
+
   ]
 }

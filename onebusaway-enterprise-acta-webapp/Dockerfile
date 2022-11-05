@@ -33,6 +33,9 @@ ENV DATABASE_PORT=3306
 ENV DATABASE_NAME='oba'
 ENV DATABASE_USER='oba'
 ENV DATABASE_PASSWORD='oba'
+ENV API_KEY='OBAKEY'
+ENV SIRI_BASE_URL='https://transit.nautilus-tech.com.au/onebusaway-api-webapp/siri'
+ENV API_BASE_URL='https://transit.nautilus-tech.com.au/onebusaway-api-webapp'
 ENV JAVA_OPTS='-Xss4m -Duser.language=en -Duser.country=AU'
 ENV LANG="en_AU.UTF-8"
 ENV LANGUAGE="en_AU:en"

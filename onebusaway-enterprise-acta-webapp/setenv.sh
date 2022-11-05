@@ -9,4 +9,7 @@ sed -i 's/${DATABASE_USER}/'"$DATABASE_USER"'/g' ${APP_PATH}/WEB-INF/classes/dat
 sed -i 's/${DATABASE_PASSWORD}/'"$DATABASE_PASSWORD"'/g' ${APP_PATH}/WEB-INF/classes/data-sources.xml
 
 sed -i 's/${GOOGLE_MAPS_API_KEY}/'"$GOOGLE_MAPS_API_KEY"'/g' /oba/config.json
+sed -i 's/${API_KEY}/'"$API_KEY"'/g' /oba/config.json
+sed -i 's/${SIRI_BASE_URL}/'"$SIRI_BASE_URL"'/g' /oba/config.json
+sed -i 's/${API_BASE_URL}/'"$API_BASE_URL"'/g' /oba/config.json
 
