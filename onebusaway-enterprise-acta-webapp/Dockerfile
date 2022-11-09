@@ -25,10 +25,10 @@ LABEL org.opencontainers.image.title='OneBusAway Enterprise App' \
       help="For more information contact Nautilus Technology Dev Team <dev@nautilus-tech.com.au>"
 
 ENV APP_PATH="/oba/tomcat/webapps/${APP_NAME}"
-ENV SERVER_URL='http://localhost:8080'
 ENV GOOGLE_MAPS_API_KEY=''
-ENV TRANSIT_DATA_SERVICE_URL='https://localhost:8082/onebusaway-transit-data-federation-webapp/remoting/transit-data-service'
-ENV DATABASE_HOST='localhost'
+ENV GOOGLE_GEOCODE_API_KEY=''
+ENV TRANSIT_DATA_SERVICE_URL='https://transit.nautilus-tech.com.au/onebusaway-transit-data-federation-webapp/remoting/transit-data-service'
+ENV DATABASE_HOST='mysql'
 ENV DATABASE_PORT=3306
 ENV DATABASE_NAME='oba'
 ENV DATABASE_USER='oba'
@@ -36,6 +36,9 @@ ENV DATABASE_PASSWORD='oba'
 ENV API_KEY='OBAKEY'
 ENV SIRI_BASE_URL='https://transit.nautilus-tech.com.au/onebusaway-api-webapp/siri'
 ENV API_BASE_URL='https://transit.nautilus-tech.com.au/onebusaway-api-webapp'
+ENV XWIKI_URL='https://xwiki.mymetro.au'
+ENV XWIKI_USERNAME=''
+ENV XWIKI_PASSWORD=''
 ENV JAVA_OPTS='-Xss4m -Duser.language=en -Duser.country=AU'
 ENV LANG="en_AU.UTF-8"
 ENV LANGUAGE="en_AU:en"

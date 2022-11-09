@@ -68,7 +68,7 @@ public class NycWikiPageWrapper implements WikiPage {
 	}
 
 	public String getContent() {
-		String content = this.page.getContent();
+		/*String content = this.page.getContent();
 
 		if(content == null) 
 			return content;
@@ -86,6 +86,7 @@ public class NycWikiPageWrapper implements WikiPage {
 			content = content.replace(match, match.replace(".", "/"));
 		}
 
-		return content;
+		return content;*/
+		return this.page.getContent();
 	}
 }

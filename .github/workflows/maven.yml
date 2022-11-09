@@ -249,13 +249,13 @@ jobs:
             DATABASE_PORT=${{ secrets.TRANSIT_DATABASE_PORT }}
             DATABASE_NAME=${{ secrets.TRANSIT_DATABASE_NAME }}
             DATABASE_USER=${{ secrets.TRANSIT_DATABASE_USER }}
-            APP_HOST_NAME=${{ env.ADMIN_APP_NAME }}-dev.australiaeast.azurecontainer.io:${{ env.SERVER_PORT }}
             SERVER_URL=http://${{ env.ADMIN_APP_NAME }}-dev.australiaeast.azurecontainer.io:${{ env.SERVER_PORT }}
           secure-environment-variables: >
             ADMIN_PASSWORD=${{ secrets.TRANSIT_ADMIN_PASSWORD }}
             OPERATOR_PASSWORD=${{ secrets.TRANSIT_OPERATOR_PASSWORD }}
             DATABASE_PASSWORD=${{ secrets.TRANSIT_DATABASE_PASSWORD }}
             GOOGLE_MAPS_API_KEY=${{ secrets.TRANSIT_GOOGLE_MAPS_API_KEY }}
+            GOOGLE_GEOCODE_API_KEY=${{ secrets.TRANSIT_GOOGLE_GEOCODE_API_KEY }}
           location: ${{ env.LOCATION }}
           cpu: 1
           memory: 1
@@ -280,9 +280,16 @@ jobs:
             DATABASE_PORT=${{ secrets.TRANSIT_DATABASE_PORT }}
             DATABASE_NAME=${{ secrets.TRANSIT_DATABASE_NAME }}
             DATABASE_USER=${{ secrets.TRANSIT_DATABASE_USER }}
+            SIRI_BASE_URL=${{ secrets.TRANSIT_SIRI_BASE_URL }}
+            API_BASE_URL=${{ secrets.TRANSIT_API_BASE_URL }}
+            API_KEY=${{ secrets.TRANSIT_API_KEY }}
+            XWIKI_URL=${{ secrets.TRANSIT_XWIKI_URL }}
           secure-environment-variables: >
             DATABASE_PASSWORD=${{ secrets.TRANSIT_DATABASE_PASSWORD }}
             GOOGLE_MAPS_API_KEY=${{ secrets.TRANSIT_GOOGLE_MAPS_API_KEY }}
+            GOOGLE_GEOCODE_API_KEY=${{ secrets.TRANSIT_GOOGLE_GEOCODE_API_KEY }}
+            XWIKI_USERNAME=${{ secrets.TRANSIT_XWIKI_USERNAME }}
+            XWIKI_PASSWORD=${{ secrets.TRANSIT_XWIKI_PASSWORD }}
           location: ${{ env.LOCATION }}
           cpu: 1
           memory: 1

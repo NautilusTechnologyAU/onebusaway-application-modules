@@ -50,13 +50,13 @@ public class EnterpriseGoogleGeocoderImpl extends EnterpriseFilteredGeocoderBase
 
   private static Logger _log = LoggerFactory.getLogger(EnterpriseGoogleGeocoderImpl.class);
 
-  private static final String GEOCODE_URL_PREFIX = "http://maps.googleapis.com";
+  private static final String GEOCODE_URL_PREFIX = "https://maps.googleapis.com";
   
   private static final String GEOCODE_PATH = "/maps/api/geocode/xml";
   
   @Autowired
   private ConfigurationService _configurationService;
-  
+
   private boolean _sensor = false;
   
   private CoordinateBounds _resultBiasingBounds = null;
@@ -78,10 +78,10 @@ public class EnterpriseGoogleGeocoderImpl extends EnterpriseFilteredGeocoderBase
       List<EnterpriseGeocoderResult> results = new ArrayList<EnterpriseGeocoderResult>();
 
       StringBuilder q = new StringBuilder();
-      q.append("sensor=").append(_sensor);
+      // q.append("sensor=").append(_sensor);
     
       String encodedLocation = URLEncoder.encode(location, "UTF-8");
-      q.append("&address=").append(encodedLocation);
+      q.append("address=").append(encodedLocation);
     
       if(_resultBiasingBounds != null) {
         q.append("&bounds=").append(
@@ -92,7 +92,7 @@ public class EnterpriseGoogleGeocoderImpl extends EnterpriseFilteredGeocoderBase
       }
 
       String clientId = 
-          _configurationService.getConfigurationValueAsString("display.googleMapsClientId", null);          
+          _configurationService.getConfigurationValueAsString("display.googleMapsClientId", null);
       String authKey = 
           _configurationService.getConfigurationValueAsString("display.googleMapsSecretKey", null);
       String channelId = 
@@ -100,17 +100,28 @@ public class EnterpriseGoogleGeocoderImpl extends EnterpriseFilteredGeocoderBase
       
       
       // Fail if we don't have client key, auth key, channel id
-      if (StringUtils.isEmpty(clientId) || StringUtils.isEmpty(authKey)
-    		  || StringUtils.isEmpty(channelId)) {
+      if (StringUtils.isEmpty(clientId) &&
+              StringUtils.isEmpty(authKey) &&
+              StringUtils.isEmpty(channelId)) {
     	  _log.warn("No clientId, authKey, or channelId. Not accessing Google.");
     	  return Collections.emptyList();
       }
       
-      q.append("&client=").append(clientId);
+      if (!StringUtils.isEmpty(clientId)) {
+        q.append("&client=").append(clientId);
+      }
       
-      q.append("&channel=").append(channelId);
-    
-      URL url = new URL(GEOCODE_URL_PREFIX + signRequest(authKey, GEOCODE_PATH + "?" + q.toString()));
+      if (!StringUtils.isEmpty(channelId)) {
+        q.append("&channel=").append(channelId);
+      }
+
+      if (!StringUtils.isEmpty(authKey)) {
+        q.append("&key=").append(authKey);
+      }
+
+
+      URL url = new URL(GEOCODE_URL_PREFIX + GEOCODE_PATH + "?" + q.toString());
+      // URL url = new URL(GEOCODE_URL_PREFIX + signRequest(authKey, GEOCODE_PATH + "?" + q.toString()));
       
       Digester digester = createDigester();
       digester.push(results);

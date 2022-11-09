@@ -16,5 +16,16 @@
 
 -->
 <div id="welcome">
-	<!-- Prevent jspx minimization -->
+    <!-- Prevent jspx minimization -->
+    <h2>Try these example searches:</h2>
+    <ul>
+        <li>Route Number or Name: <a href="#H20">H20</a>, <a href="#J1T">J1T</a>, <a href="#GLNELG">GLNELG</a>
+        </li>
+        <li>Stop Code: <a href="#16287">16287</a>, <a href="#13422">13422</a>
+        </li>
+        <li>Address: <a href="#Stop%20X1%20Pulteney%20St%20-%20West%20side%2C%20Adelaide%20SA%205000%2C%20Australia">Stop X1
+                Pulteney St - West side, Adelaide SA 5000, Australia
+            </a>
+        </li>
+    </ul>
 </div>

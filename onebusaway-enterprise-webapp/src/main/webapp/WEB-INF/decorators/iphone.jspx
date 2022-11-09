@@ -40,7 +40,7 @@
 
 <body >
 <div id="root">
-<div id="topBar"><div id="topBarLabel"><a href="${pageContext.request.contextPath}/where/iphone/index.action"><span>OneBusAway</span></a></div></div>
+<div id="topBar"><div id="topBarLabel"><a href="${pageContext.request.contextPath}/where/iphone/index.action"><span>MyMetro</span></a></div></div>
 <div id="content"><decorator:body /></div>
 </div>
 

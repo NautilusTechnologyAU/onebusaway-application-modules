@@ -27,11 +27,15 @@ import org.onebusaway.enterprise.webapp.actions.OneBusAwayEnterpriseActionSuppor
 import org.onebusaway.enterprise.webapp.actions.wiki.model.NycWikiPageWrapper;
 import org.onebusaway.wiki.api.WikiDocumentService;
 import org.onebusaway.wiki.api.WikiRenderingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class IndexAction extends OneBusAwayEnterpriseActionSupport {
 
 	private static final long serialVersionUID = 1L;
+
+	private static Logger _log = LoggerFactory.getLogger(IndexAction.class);
 
 	@Autowired
 	private WikiDocumentService _wikiDocumentService;
@@ -145,6 +149,8 @@ public class IndexAction extends OneBusAwayEnterpriseActionSupport {
 			name = "Index";
 		}
 		
+		_log.info("Wiki request with Namespace: {}, Name: {}", namespace, name);
+
 		if (namespace != null && name != null) {
 			// try to get TOC page for this namespace
 			try {
@@ -159,6 +165,7 @@ public class IndexAction extends OneBusAwayEnterpriseActionSupport {
 					hasToc = false;
 				}
 			} catch (Exception ex) {
+				_log.error("Error retrieving TOC", ex);
 				toc = null;
 				hasToc = false;
 			}
@@ -176,6 +183,7 @@ public class IndexAction extends OneBusAwayEnterpriseActionSupport {
 						adminToc = null;
 					}
 				} catch(Exception ex) {
+					_log.error("Error retrieving AdminTOC", ex);
 					adminToc = null;
 				}
 			} else {
@@ -197,10 +205,11 @@ public class IndexAction extends OneBusAwayEnterpriseActionSupport {
 					editLink = null;
 					title = null;
 					lastModifiedTimestamp = null;
-					
+					_log.error("Wiki page does not exist");
 					return "NotFound";
 				}
 			} catch (Exception ex) {
+				_log.error("Error retrieving content", ex);
 				throw new JspException(ex);
 			}
 		}

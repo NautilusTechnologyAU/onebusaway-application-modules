@@ -56,6 +56,14 @@
     <bean id="externalGeocoderImpl"
           class="org.onebusaway.geocoder.enterprise.impl.EnterpriseGoogleGeocoderImpl"
           depends-on="serviceAreaServiceImpl">
+        <property name="resultBiasingBounds">
+            <bean class="org.onebusaway.geospatial.model.CoordinateBounds">
+                <property name="minLat" value="-35.339223000000004"/>
+                <property name="minLon" value="138.445316"/>
+                <property name="maxLat" value="-34.571043"/>
+                <property name="maxLon" value="139.036087"/>
+            </bean>
+        </property>
     </bean>
 
     <bean class="org.onebusaway.container.spring.PropertyOverrideConfigurer">
@@ -81,25 +89,35 @@
 
     <!--
     <bean id="wikiDocumentService" class="org.onebusaway.wiki.file.FileWikiDocumentServiceImpl" lazy-init="true">
-        </bean>
-            -->
-    <!--
-
-<jee:jndi-lookup id="xwikiUrlBean" jndi-name="java:comp/env/xwikiUrl" resource-ref="true" ></jee:jndi-lookup>
-<jee:jndi-lookup id="xwikiDocumentEditUrlBean" jndi-name="java:comp/env/wikiDocumentEditUrl" resource-ref="true" ></jee:jndi-lookup>
-<jee:jndi-lookup id="xwikiAttachmentUrlBean" jndi-name="java:comp/env/wikiAttachmentUrl" resource-ref="true" ></jee:jndi-lookup>
-
-<bean id="wikiDocumentService" class="org.onebusaway.wiki.xwiki.impl.XWikiDocumentServiceImpl" lazy-init="true">
-    <property name="xwikiUrl" ref="xwikiUrlBean" />
-        </bean>
+    </bean>
     -->
     <!--
-<bean id="wikiRenderingService" class="org.onebusaway.wiki.xwiki.impl.XWikiRenderingServiceImpl" lazy-init="true">
-<property name="wikiDocumentViewUrl" value="/wiki/%{documentName}" />
-<property name="wikiDocumentEditUrl" ref="xwikiDocumentEditUrlBean" />
-<property name="wikiAttachmentUrl" ref="xwikiAttachmentUrlBean" />
-</bean>
--->
+    <jee:jndi-lookup id="xwikiUrlBean" jndi-name="java:comp/env/xwikiUrl" resource-ref="true" ></jee:jndi-lookup>
+    <jee:jndi-lookup id="xwikiDocumentEditUrlBean" jndi-name="java:comp/env/wikiDocumentEditUrl" resource-ref="true" ></jee:jndi-lookup>
+    <jee:jndi-lookup id="xwikiAttachmentUrlBean" jndi-name="java:comp/env/wikiAttachmentUrl" resource-ref="true" ></jee:jndi-lookup>
+
+    <bean id="wikiDocumentService" class="org.onebusaway.wiki.xwiki.impl.XWikiDocumentServiceImpl" lazy-init="true">
+        <property name="xwikiUrl" ref="xwikiUrlBean" />
+    </bean>
+
+    <bean id="wikiRenderingService" class="org.onebusaway.wiki.xwiki.impl.XWikiRenderingServiceImpl" lazy-init="true">
+        <property name="wikiDocumentViewUrl" value="/wiki/%{documentName}" />
+        <property name="wikiDocumentEditUrl" ref="xwikiDocumentEditUrlBean" />
+        <property name="wikiAttachmentUrl" ref="xwikiAttachmentUrlBean" />
+    </bean>
+    -->
+    <bean id="wikiDocumentService" class="org.onebusaway.wiki.xwiki.impl.XWikiDocumentServiceImpl">
+        <property name="xwikiUrl" value="${XWIKI_URL}" />
+        <property name="xwikiUsername" value="${XWIKI_USERNAME}" />
+        <property name="xwikiPassword" value="${XWIKI_PASSWORD}" />
+    </bean>
+
+    <bean id="wikiRenderingService" class="org.onebusaway.wiki.xwiki.impl.XWikiRenderingServiceImpl">
+        <property name="wikiDocumentViewUrl" value="/wiki/%{documentName}" />
+        <property name="wikiAttachmentUrl" value="${XWIKI_URL}/bin/download/Main/WebHome/%{attachmentName}" />
+        <property name="wikiDocumentEditUrl" value="${XWIKI_URL}/bin/edit/%{documentName}" />
+    </bean>
+
 
     <import resource="classpath:branded-sources.xml"/>
 </beans>

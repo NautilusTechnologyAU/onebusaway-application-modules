@@ -446,7 +446,7 @@ OBA.Sidebar = function() {
 
 		matches.show();
 		
-		if (filteredMatches.find("li").length > 1) {
+		if (filteredMatches.find("li").length > 0) {
 			var showAll = jQuery("<li></li>").addClass("filtered-match").html('<a href="#' + OBA.Util.displayStopId(stopId) + '">See&nbsp;All</a>');
 			filteredMatches.find("ul").append(showAll);
 			filteredMatches.show();
@@ -726,12 +726,12 @@ OBA.Sidebar = function() {
 						break;
 				}	
 				
-			} else if (matches.length > 1 && resultType == "RouteResult") {
+			} else if (matches.length > 0 && resultType == "RouteResult") {
 				// suppport multiple routes found
 				addRoutesToLegend(matches, "Routes:", null, null);
 				routeMap.panToRoute(matches[0].id);
 				(wizard && wizard.enabled()) ? results.triggerHandler('route_result') : null;
-			} else if (matches.length > 1 && resultType == "StopResult") {
+			} else if (matches.length > 0 && resultType == "StopResult") {
 				// we've matched multiple stops across agencies -- disambiguate
 				showStopPickerList(matches);
 				
