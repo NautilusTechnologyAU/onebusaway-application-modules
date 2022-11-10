@@ -10,6 +10,8 @@
     {"component": "display", "key": "display.apiBaseUrl", "value": "${API_BASE_URL}"},
     {"component": "display", "key": "display.googleMapsSecretKey", "value": "${GOOGLE_GEOCODE_API_KEY}"},
     {"component": "display", "key": "display.serviceDateFiltering", "value": "true"},
-    {"component": "display", "key": "display.mapZoom", "value":"20" }
+    {"component": "display", "key": "display.mapZoom", "value":"20" },
+    {"component": "display", "key": "main.agencysite.link", "value":"https://www.adelaidemetro.com.au" }
+
   ]
 }

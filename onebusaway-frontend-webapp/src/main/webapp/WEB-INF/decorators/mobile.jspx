@@ -74,14 +74,19 @@
 	
 	<div id="footer">
     	<p>
-			<s:url var="mobileHelpUrl" namespace="/m/wiki" action="Help/Index"/>	
-    		<a href="${mobileHelpUrl}">Help</a> | 
+
+			<s:url var="aboutUrl" namespace="/wiki" action="WebHome">
+				<s:param name="namespace">About</s:param>
+			</s:url>
+			<a href="${aboutUrl}">Help</a> |
     		
     		<s:url var="desktopUrl" namespace="/" action="index"/>	
     		<a href="${desktopUrl}">Desktop Site</a> |
-    		
-    		<s:url var="contactUrl" namespace="/wiki" action="ContactUs"/>
-    		<a href="${contactUrl}">Contact</a> |
+
+			<s:url var="contactUrl" namespace="/wiki" action="WebHome">
+				<s:param name="namespace">Contact</s:param>
+			</s:url>
+			<a href="${contactUrl}">Contact</a> |
 
 			<s:set var="link" value="getText('main.agencysite.link')" />
 			<a href="${link}"><s:property value="getText('mobile.agency.name')" /></a>
