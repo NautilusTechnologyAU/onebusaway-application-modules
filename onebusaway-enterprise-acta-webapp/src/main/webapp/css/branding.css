@@ -228,7 +228,6 @@
 html, body {
     background-image: url("img/grey_bg.jpg");
     background-repeat: repeat-x;
-    color: #333333;
     font: 13px/1.231 helvetica,arial,clean,sans-serif;
 }
 #mainbox {
@@ -239,10 +238,12 @@ html, body {
 }
 #topbar {
     height: 121px;
+    background-image: url(img/topbar_background.png);
+    background-repeat: repeat;
 }
 #topbar #branding {
     float: left;
-    height: 90px;
+    height: 114px;
 }
 #topbar #branding a img,
 #topbar #branding a {
@@ -502,7 +503,7 @@ Sub level menu
     height: 100%;
     width: 100%;
     float: left;
-    background-color: #78AA36;
+    background-color: blueviolet;
     position: relative;
     display: flex;
     flex-direction: row-reverse;
