@@ -135,7 +135,7 @@ strong {
 /* body padding */
 #branding,#searchPanel,#content,#footer,#global-alerts {
 	margin: 0;
-	padding: 0.8em;
+/*	padding: 0.8em;*/
 	padding-bottom: 0;
 	padding-top: 0;
 }
@@ -152,6 +152,8 @@ strong {
 #branding {
 	margin-top: 1.0em;
 	margin-bottom: 0.3em;
+	background-image: url("/css/img/topbar_background.png");
+    background-repeat: repeat;
 }
 
 #footer {
@@ -167,6 +169,7 @@ strong {
 	height: 34px;
 	display: block;
 	margin-bottom: 0.3em;
+	/*margin-left: 0.8em;*/
 	border: 1px solid rgb(150,150,150);
 	box-shadow: inset 0 3px 8px rgba(232,232,232,1);
 	-moz-box-shadow: inset 0 3px 8px rgba(232,232,232,1);
@@ -545,6 +548,7 @@ small {
 
 #nearby-button-bar {
 	margin-bottom: 0.9em;
+	/*margin-left: 0.8em;*/
 	white-space: nowrap;
 	width: 94%;
 	-webkit-box-shadow: 0px 1px 2px rgba(240, 240, 240, 0.75);
