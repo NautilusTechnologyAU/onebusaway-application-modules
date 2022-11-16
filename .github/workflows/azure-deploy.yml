@@ -147,5 +147,5 @@ jobs:
             XWIKI_USERNAME=${{ secrets.TRANSIT_XWIKI_USERNAME }}
             XWIKI_PASSWORD=${{ secrets.TRANSIT_XWIKI_PASSWORD }}
           location: ${{ env.LOCATION }}
-          cpu: 1
-          memory: 2
+          cpu: 2
+          memory: 4
