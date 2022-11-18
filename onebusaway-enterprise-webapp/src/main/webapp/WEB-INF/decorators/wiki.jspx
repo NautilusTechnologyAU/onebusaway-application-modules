@@ -142,6 +142,11 @@
 </script>
 
 <decorator:head />
+	<script async="async"
+			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2389737821879720"
+			crossorigin="anonymous">
+		<!-- //prevent jspx minimization -->
+	</script>
 </head>
 
 <body>

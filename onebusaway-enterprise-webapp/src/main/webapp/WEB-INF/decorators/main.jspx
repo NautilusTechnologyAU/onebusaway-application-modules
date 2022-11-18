@@ -113,6 +113,11 @@
 </script>
 
 <decorator:head />
+<script async="async"
+		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2389737821879720"
+		crossorigin="anonymous">
+	<!-- //prevent jspx minimization -->
+</script>
 </head>
 
 <body>
@@ -132,8 +137,8 @@
 
 			<div id="search">
 				<ul id="topbar-links">
-				</ul>
-			</div>
+
+				</ul>			</div>
 
 			<!-- Include the tabs.jspx that provides branded links -->
 			<c:import url="/WEB-INF/decorators/includes/tabs.jspx" />

@@ -129,7 +129,11 @@
 </s:url>
 <script type="text/javascript" src="${url}"><!-- //prevent jspx minimization --></script>
 
-<script type="text/javascript" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2389737821879720" crossorigin="anonymous"><!-- //prevent jspx minimization --></script>
+	<script async="async"
+			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2389737821879720"
+			crossorigin="anonymous">
+		<!-- //prevent jspx minimization -->
+	</script>
 
 </head>
 <body>
@@ -178,7 +182,7 @@
 	         <input type="submit" value="Find" class="submit"/>
 	         <p id="tip">Enter a bus stop code, route, or street address.</p>
 	       </form>
-	       
+
 	       <div id="matches">
 	       	 <h2>Results:</h2>
 	       	 <ul><!-- //prevent jspx minimization --></ul>
