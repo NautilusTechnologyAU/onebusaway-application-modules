@@ -25,7 +25,7 @@
             ${message}
         </Play>
         <Play>
-            <s:property value="stringToSpeechUrl('Press 1 to continue.')"/>
+            <s:property value="getLocalisedMessage('PRESS_ONE')"/>
         </Play>
     </Gather>
 </Response>

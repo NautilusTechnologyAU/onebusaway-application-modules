@@ -25,7 +25,7 @@
             <s:property value="getLocalisedMessage('NO_MOST_RECENT')"/>
         </Play>
         <Play>
-            <s:property value="stringToSpeechUrl('Please press any key to continue.')"/>
+            <s:property value="getLocalisedMessage('PRESS_ANY_KEY')"/>
         </Play>
     </Gather>
 </Response>

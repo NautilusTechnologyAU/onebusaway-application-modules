@@ -27,11 +27,11 @@
         </Play>
         <Pause length="5"/>
         <Play>
-            <s:property value="stringToSpeechUrl('Please enter your selection followed by the hash sign.')"/>
+            <s:property value="getLocalisedMessage('ENTER_SELECTION')"/>
         </Play>
         <Pause length="60"/>
         <Play>
-            <s:property value="stringToSpeechUrl('Thank you for calling. Goodbye.')"/>
+            <s:property value="getLocalisedMessage('GOODBYE')"/>
         </Play>
     </Gather>
 </Response>

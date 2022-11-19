@@ -26,7 +26,7 @@
             ${message}
         </Play>
         <Play>
-            <s:property value="stringToSpeechUrl('To repeat this message, please press  8.')"/>
+            <s:property value="getLocalisedMessage('TO_REPEAT')"/>
         </Play>
         <Play>
             <s:property value="getLocalisedMessage('HOW_TO_GO_BACK')"/>

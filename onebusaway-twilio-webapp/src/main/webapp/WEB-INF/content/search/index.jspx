@@ -29,7 +29,7 @@
             <s:property value="getLocalisedMessage('HOW_TO_GO_BACK')"/>
         </Play>
         <Play>
-            <s:property value="stringToSpeechUrl('Otherwise please enter the route number you wish to search followed by the hash sign.')"/>
+            <s:property value="getLocalisedMessage('RECENT_STOP_OTHERWISE_MESSAGE')"/>
         </Play>
         <Pause length="10"/>
     </Gather>

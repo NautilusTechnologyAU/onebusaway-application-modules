@@ -75,6 +75,6 @@ public class AbstractTextmarksAction extends NextActionSupport {
   }
 
   public String getBrandingInfo() {
-    return System.lineSeparator() + System.lineSeparator() + "Powered by Nautilus Technology. Visit https://transit.nautilus-tech.com.au for more information";
+    return System.lineSeparator() + System.lineSeparator() + "Powered by MyMetro. Visit https://mymetro.au for more information";
   }
 }
