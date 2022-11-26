@@ -124,6 +124,18 @@
 			crossorigin="anonymous">
 		<!-- //prevent jspx minimization -->
 	</script>
+	<!-- Google tag (gtag.js) - Google Analytics -->
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-249276096-1">
+		<!-- //prevent jspx minimization -->
+	</script>
+	<script>
+		<!-- //prevent jspx minimization -->
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-249276096-1');
+	</script>
 </head>
 
 <body>

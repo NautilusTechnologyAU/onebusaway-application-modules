@@ -42,6 +42,7 @@ ENV XWIKI_PASSWORD=''
 ENV JAVA_OPTS='-Xss4m -Duser.language=en -Duser.country=AU'
 ENV LANG="en_AU.UTF-8"
 ENV LANGUAGE="en_AU:en"
+ENV TIMEZONE="Australia/Adelaide"
 
 # Copy the application files
 ADD "./target/${APP_NAME}.war" ${APP_PATH}/${APP_NAME}.war
@@ -50,7 +51,9 @@ ADD './setenv.sh' ${CATALINA_HOME}/bin/setenv.sh
 
 WORKDIR ${APP_PATH}
 
+# RUN apt-get -y update && apt-get -y install systemd
 # Extract the war file and create symbolic link in Tomcat webapps
+RUN ls -l /etc/localtime && rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && date
 RUN jar -xvf ${APP_NAME}.war && \
     rm ${APP_NAME}.war && \
     ln -s /oba/tomcat/webapps/${APP_NAME} ${CATALINA_HOME}/webapps/ROOT && \

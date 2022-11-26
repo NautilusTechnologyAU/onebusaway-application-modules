@@ -118,6 +118,18 @@
 		crossorigin="anonymous">
 	<!-- //prevent jspx minimization -->
 </script>
+	<!-- Google tag (gtag.js) - Google Analytics -->
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-249276096-1">
+		<!-- //prevent jspx minimization -->
+	</script>
+	<script>
+		<!-- //prevent jspx minimization -->
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-249276096-1');
+	</script>
 </head>
 
 <body>
@@ -131,14 +143,23 @@
 							<s:property value="frontEndVersion" />
 						</s:param>
 					</s:url>
-					<img src="${url}" alt="Agency logo" />
+					<img src="${url}" alt="MyMetro" />
 				</a>
 			</div>
 
 			<div id="search">
+				<c:import url="/WEB-INF/decorators/includes/topBarLinks.jspx" />
+				<!--
 				<ul id="topbar-links">
-
-				</ul>			</div>
+					<li>
+						<s:set var="link" value="getText('main.apps.link')" />
+						<a href="${link}">
+							<img id="googlePlayImage" src="/css/img/google-play.png" alt="Get MyMetro on Google Play" />
+						</a>
+					</li>
+				</ul>
+				-->
+			</div>
 
 			<!-- Include the tabs.jspx that provides branded links -->
 			<c:import url="/WEB-INF/decorators/includes/tabs.jspx" />

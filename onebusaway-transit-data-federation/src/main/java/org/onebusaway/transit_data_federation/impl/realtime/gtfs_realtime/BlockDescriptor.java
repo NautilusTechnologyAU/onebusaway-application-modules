@@ -34,7 +34,8 @@ class BlockDescriptor {
     SCHEDULED,
     ADDED,
     UNSCHEDULED,
-    CANCELED
+    CANCELED,
+    REPLACEMENT
   };
 
   public BlockInstance getBlockInstance() {

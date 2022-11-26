@@ -226,15 +226,17 @@
 /* from MTA CSS: */
 
 html, body {
-    background-image: url("img/grey_bg.jpg");
-    background-repeat: repeat-x;
+    /*background-image: url("img/grey_bg.jpg");
+    background-repeat: repeat-x;*/
+    background-color: rgb(243 244 246);
     font: 13px/1.231 helvetica,arial,clean,sans-serif;
 }
 #mainbox {
     background-color: #FFFFFF;
     margin: 0 auto;
     position: relative;
-    width: 960px;
+    /* width: 960px; */
+    display: contents;
 }
 #topbar {
     height: 145px;
@@ -252,13 +254,14 @@ html, body {
 }
 #topbar #search {
     float: right;
-    margin: 4px 20px 0 0;
+    margin: -2px 5px 0 0;
     width: 460px;
 }
 #topbar #search ul#topbar-links {
     float: right;
     list-style-type: none;
-    margin: 10px 0 6px 4px;
+    margin: 4px 0 6px 4px;
+    display: flex;
 }
 #topbar #search ul#topbar-links li a {
     color: #78AA36;
@@ -532,6 +535,12 @@ Sub level menu
 
 #mobileImage {
     display: block;
+}
+
+#googlePlayImage {
+    display: block;
+    height: 72px;
+    margin: 0 0 0 4px;
 }
 
 #flexSpreader {
