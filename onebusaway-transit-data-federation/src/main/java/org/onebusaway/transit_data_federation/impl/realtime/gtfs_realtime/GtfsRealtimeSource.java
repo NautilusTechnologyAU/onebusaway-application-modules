@@ -37,14 +37,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import com.google.transit.realtime.GtfsRealtime;
+import com.google.transit.realtime.GtfsRealtimeExtensions;
 import org.apache.commons.lang.StringUtils;
 import org.onebusaway.geospatial.model.CoordinatePoint;
 import org.onebusaway.geospatial.services.SphericalGeometryLibrary;
 import org.onebusaway.gtfs.model.AgencyAndId;
-import org.onebusaway.realtime.api.VehicleLocationListener;
-import org.onebusaway.realtime.api.VehicleLocationRecord;
-import org.onebusaway.realtime.api.VehicleOccupancyListener;
-import org.onebusaway.realtime.api.VehicleOccupancyRecord;
+import org.onebusaway.realtime.api.*;
 import org.onebusaway.transit_data.model.service_alerts.ECause;
 import org.onebusaway.transit_data.model.service_alerts.ESeverity;
 import org.onebusaway.alerts.impl.ServiceAlertLocalizedString;
@@ -73,6 +71,7 @@ import com.google.transit.realtime.GtfsRealtime.FeedHeader;
 import com.google.transit.realtime.GtfsRealtime.FeedMessage;
 import com.google.transit.realtime.GtfsRealtimeConstants;
 import com.google.transit.realtime.GtfsRealtimeOneBusAway;
+import com.google.transit.realtime.GtfsRealtimeAdelaideMetro;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -92,6 +91,7 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   static {
     _registry.add(GtfsRealtimeOneBusAway.obaFeedEntity);
     _registry.add(GtfsRealtimeOneBusAway.obaTripUpdate);
+    _registry.add(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor);
   }
 
   private AgencyService _agencyService;
@@ -105,6 +105,8 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   private VehicleLocationListener _vehicleLocationListener;
 
   private VehicleOccupancyListener _vehicleOccupancyListener;
+
+  private TfnswVehicleDescriptorListener _tfnswVehicleDescriptorListener;
 
   private ServiceAlertsService _serviceAlertService;
 
@@ -218,6 +220,11 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   @Autowired
   public void setVehicleOccupancyListener(VehicleOccupancyListener vehicleOccupancyListener) {
     _vehicleOccupancyListener = vehicleOccupancyListener;
+  }
+
+  @Autowired
+  public void setTfnswVehicleDescriptorListener(TfnswVehicleDescriptorListener tfnswVehicleDescriptorListener) {
+    _tfnswVehicleDescriptorListener = tfnswVehicleDescriptorListener;
   }
 
   @Autowired
@@ -406,16 +413,8 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   
   @PostConstruct
   public void start() {
-    if (_agencyIds.isEmpty()) {
-      _log.info("no agency ids specified for GtfsRealtimeSource, so defaulting to full agency id set");
-      List<String> agencyIds = _agencyService.getAllAgencyIds();
-      _agencyIds.addAll(agencyIds);
-      if (_agencyIds.size() > 3) {
-        _log.warn("The default agency id set is quite large (n="
-            + _agencyIds.size()
-            + ").  You might consider specifying the applicable agencies for your GtfsRealtimeSource.");
-      }
-    }
+    _log.info("Creating GTFS-realtime data source for " + getAgencyIds() + "...");
+    loadAgencies();
 
     _entitySource = new GtfsRealtimeEntitySource();
     _entitySource.setAgencyIds(_agencyIds);
@@ -440,6 +439,23 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
           new RefreshTask(), 0, _refreshInterval, TimeUnit.SECONDS);
     }
   }
+
+  void loadAgencies() {
+    if (_agencyIds.isEmpty()) {
+      _log.info("no agency ids specified for GtfsRealtimeSource, so defaulting to full agency id set");
+      List<String> agencyIds = _agencyService.getAllAgencyIds();
+      _agencyIds.addAll(agencyIds);
+      if (_agencyIds.size() > 3) {
+        _log.warn("The default agency id set is quite large (n="
+                + _agencyIds.size()
+                + ").  You might consider specifying the applicable agencies for your GtfsRealtimeSource.");
+      }
+
+      if (_entitySource != null) {
+        _entitySource.setAgencyIds(_agencyIds);
+      }
+    }
+  }
   
   public void reset() {
     _lastVehicleUpdate.clear();
@@ -447,6 +463,7 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
 
   @PreDestroy
   public void stop() {
+    _log.info("Destroying GTFS-realtime data source for " + getAgencyIds() + "...");
     if (_refreshTask != null) {
       _refreshTask.cancel(true);
       _refreshTask = null;
@@ -454,10 +471,12 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   }
 
   public void refresh() throws IOException {
+    _log.info("Starting GTFS-realtime data update for " + getAgencyIds() + "...");
     if (!graphReady()) {
       _log.warn("skipping update " + getAgencyIds() + ", bundle not ready");
       return;
     }
+    loadAgencies();
     FeedMessage tripUpdates = _sftpTripUpdatesUrl != null ?
         readOrReturnDefault(_sftpTripUpdatesUrl)
         : readOrReturnDefault(_tripUpdatesUrl);
@@ -475,6 +494,7 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
     handleUpdates(result, tripUpdates, vehiclePositions, alerts, alertCollection);
     // update reference in a thread safe manner
     _monitoredResult = result;
+    _log.info("GTFS-realtime data update completed for " + getAgencyIds());
   }
 
   private ServiceAlerts.ServiceAlertsCollection readOrReturnDefaultCollection(URL alertCollectionUrl) throws IOException {
@@ -514,14 +534,12 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
             tripUpdates, vehiclePositions);
     result.setRecordsTotal(combinedUpdates.size());
     handleCombinedUpdates(result, combinedUpdates);
-    cacheVehicleLocations(vehiclePositions);
+    // cacheVehicleLocations(vehiclePositions);
     handleAlerts(alerts);
     handleAlertCollection(alertCollection);
   }
 
   private void cacheVehicleLocations(FeedMessage vehiclePositions) {
-
-
     for (FeedEntity entity : vehiclePositions.getEntityList()) {
       if (entity.hasVehicle()) {
         GtfsRealtime.VehiclePosition vehicle = entity.getVehicle();
@@ -529,7 +547,10 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
                 new AgencyAndId(getAgencyIds().get(0), vehicle.getVehicle().getId()),
                 vehicle.getPosition().getLatitude(),
                 vehicle.getPosition().getLongitude(),
-                vehicle.getTimestamp());
+                vehicle.getTimestamp(),
+                vehicle.getPosition().hasSpeed() ? vehicle.getPosition().getSpeed() : 0,
+                vehicle.getPosition().hasOdometer() ? vehicle.getPosition().getOdometer() : 0,
+                vehicle.getPosition().hasBearing() ? vehicle.getPosition().getBearing() : 0);
       }
     }
   }
@@ -569,9 +590,17 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
         if (prev == null || prev.before(timestamp)) {
           _log.debug("matched vehicle " + vehicleId + " on block=" + record.getBlockId() + " with scheduleDeviation=" + record.getScheduleDeviation());
           _vehicleLocationListener.handleVehicleLocationRecord(record);
+
           if (vor != null) {
             _vehicleOccupancyListener.handleVehicleOccupancyRecord(vor);
           }
+
+          // Tfnsw vehicle descriptor
+          TfnswVehicleDescriptorRecord vdr = _tripsLibrary.createTfnswVehicleDescriptorRecordForUpdate(result, update);
+          if (vdr != null) {
+            _tfnswVehicleDescriptorListener.handleTfnswVehicleDescriptor(vdr);
+          }
+
           _lastVehicleUpdate.put(vehicleId, timestamp);
         } else {
           _log.debug("discarding: update for vehicle " + vehicleId + " as timestamp in past");
@@ -1182,6 +1211,8 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
       try {
         if (_enabled) {
           refresh();
+        } else {
+          _log.warn("GTFS-realtime data sources is not enabled for " + _agencyIds);
         }
       } catch (Throwable ex) {
         _log.warn("Error updating from GTFS-realtime data sources", ex);

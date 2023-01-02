@@ -18,6 +18,7 @@ package org.onebusaway.transit_data_federation.services.realtime;
 import java.util.List;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
+import org.onebusaway.realtime.api.TfnswVehicleDescriptorRecord;
 import org.onebusaway.realtime.api.VehicleLocationRecord;
 import org.onebusaway.realtime.api.VehicleOccupancyRecord;
 
@@ -53,4 +54,13 @@ public class VehicleStatus {
 
   public void setOccupancyRecord(VehicleOccupancyRecord vehicleOccupancyRecord) { this.occupancyRecord = vehicleOccupancyRecord; }
 
+  private TfnswVehicleDescriptorRecord tfnswVehicleDescriptorRecord;
+
+  public TfnswVehicleDescriptorRecord getTfnswVehicleDescriptorRecord() {
+    return tfnswVehicleDescriptorRecord;
+  }
+
+  public void setTfnswVehicleDescriptorRecord(TfnswVehicleDescriptorRecord tfnswVehicleDescriptorRecord) {
+    this.tfnswVehicleDescriptorRecord = tfnswVehicleDescriptorRecord;
+  }
 }

@@ -18,36 +18,44 @@
 
 -->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xsi:schemaLocation="
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/onebusaway" />
-        <property name="username" value="root" />
-        <property name="password" value="root" />
+        <property name="url" value="jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;jdbcCompliantTruncation=false&amp;enabledTLSProtocols=TLSv1.2"/>
+        <property name="username" value="${DATABASE_USER}"/>
+        <property name="password" value="${DATABASE_PASSWORD}"/>
     </bean>
 
     <bean class="org.onebusaway.container.spring.SystemPropertyOverrideConfigurer">
-      <property name="order" value="-2" />
-      <property name="properties">
-          <props>
-              <prop key="bundlePath">/oba/gtfs/latest</prop>
-         </props>
-      </property>
+        <property name="order" value="-2" />
+        <property name="properties">
+            <props>
+                <prop key="bundlePath">/oba/gtfs/latest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean class="org.onebusaway.transit_data_federation.impl.realtime.gtfs_realtime.GtfsRealtimeSource">
+        <property name="tripUpdatesUrl" value="https://gtfs.adelaidemetro.com.au/v1/realtime/trip_updates" />
+        <property name="vehiclePositionsUrl" value="https://gtfs.adelaidemetro.com.au/v1/realtime/vehicle_positions" />
+        <property name="alertsUrl" value="https://gtfs.adelaidemetro.com.au/v1/realtime/service_alerts" />
+        <property name="refreshInterval" value="60" />
     </bean>
 
     <bean id="httpServiceClient" class="org.onebusaway.transit_data_federation.util.HttpServiceClientImpl" >
-      <constructor-arg type="java.lang.String" value="localhost"/>
-      <constructor-arg type="java.lang.Integer" value="9999" />
+        <constructor-arg type="java.lang.String" value="localhost"/>
+        <constructor-arg type="java.lang.Integer" value="8080" />
         <constructor-arg type="java.lang.String" value="/api/" />
     </bean>
 
     <bean id="bundleManagementService" class="org.onebusaway.transit_data_federation.impl.bundle.BundleManagementServiceImpl">
-      <property name="bundleStoreRoot" value="/oba/gtfs/latest" />
-      <property name="standaloneMode" value="true" />
+        <property name="bundleStoreRoot" value="/oba/gtfs/latest" />
+        <property name="standaloneMode" value="true" />
     </bean>
 
 </beans>
+

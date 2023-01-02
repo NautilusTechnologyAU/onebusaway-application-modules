@@ -32,11 +32,12 @@ ENV DATABASE_PORT=3306
 ENV DATABASE_NAME='oba'
 ENV DATABASE_USER='oba'
 ENV DATABASE_PASSWORD='oba'
-ENV JAVA_OPTS='-Xss4m -Duser.language=en -Duser.country=AU'
 ENV LANG="en_AU.UTF-8"
 ENV LANGUAGE="en_AU:en"
+ENV JAVA_OPTS="-Xss4m -Duser.language=en -Duser.country=AU -Duser.timezone=${TIMEZONE}"
 
 # Copy the application files
+RUN ls -l /etc/localtime && rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && date
 ADD "./target/${APP_NAME}.war" ${APP_PATH}/${APP_NAME}.war
 ADD './config.json' /oba/config.json
 ADD './setenv.sh' ${CATALINA_HOME}/bin/setenv.sh

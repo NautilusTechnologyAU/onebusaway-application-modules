@@ -19,9 +19,11 @@ import org.onebusaway.collections.CollectionsLibrary;
 import org.onebusaway.geospatial.model.CoordinatePoint;
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.realtime.api.EVehiclePhase;
+import org.onebusaway.realtime.api.TfnswVehicleDescriptorRecord;
 import org.onebusaway.realtime.api.VehicleLocationListener;
 import org.onebusaway.realtime.api.VehicleLocationRecord;
 import org.onebusaway.transit_data.model.ListBean;
+import org.onebusaway.transit_data.model.TfnswVehicleDescriptorBean;
 import org.onebusaway.transit_data.model.VehicleStatusBean;
 import org.onebusaway.transit_data.model.realtime.VehicleLocationRecordBean;
 import org.onebusaway.transit_data.model.realtime.VehicleLocationRecordQueryBean;
@@ -30,14 +32,13 @@ import org.onebusaway.transit_data.model.trips.TripDetailsInclusionBean;
 import org.onebusaway.transit_data_federation.impl.realtime.BlockLocationRecord;
 import org.onebusaway.transit_data_federation.impl.realtime.BlockLocationRecordDao;
 import org.onebusaway.transit_data_federation.model.TargetTime;
-import org.onebusaway.util.AgencyAndIdLibrary;
 import org.onebusaway.transit_data_federation.services.beans.TripDetailsBeanService;
 import org.onebusaway.transit_data_federation.services.beans.VehicleStatusBeanService;
 import org.onebusaway.transit_data_federation.services.realtime.BlockLocation;
 import org.onebusaway.transit_data_federation.services.realtime.BlockLocationService;
 import org.onebusaway.transit_data_federation.services.realtime.VehicleStatus;
 import org.onebusaway.transit_data_federation.services.realtime.VehicleStatusService;
-
+import org.onebusaway.util.AgencyAndIdLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -138,9 +139,11 @@ class VehicleStatusBeanServiceImpl implements VehicleStatusBeanService {
     bean.setCurrentOrientation(record.getCurrentOrientation());
     bean.setDistanceAlongBlock(record.getDistanceAlongBlock());
     bean.setScheduleDeviation(record.getScheduleDeviation());
+    bean.setSpeed(record.getSpeed());
+    bean.setOdometer(record.getOdometer());
+    bean.setBearing(record.getBearing());
     return bean;
   }
-
 
   @Override
   public ListBean<VehicleLocationRecordBean> getVehicleLocations(
@@ -193,6 +196,10 @@ class VehicleStatusBeanServiceImpl implements VehicleStatusBeanService {
       r.setDistanceAlongBlock(bean.getDistanceAlongBlock());
     if (bean.isScheduleDeviationSet())
       r.setScheduleDeviation(bean.getScheduleDeviation());
+
+    r.setSpeed(bean.getSpeed());
+    r.setOdometer(bean.getOdometer());
+    r.setBearing(bean.getBearing());
 
     _vehicleLocationListener.handleVehicleLocationRecord(r);
   }
@@ -247,6 +254,15 @@ class VehicleStatusBeanServiceImpl implements VehicleStatusBeanService {
     if (status.getOccupancyRecord() != null)
       bean.setOccupancyStatus(status.getOccupancyRecord().getOccupancyStatus());
 
+    if (status.getTfnswVehicleDescriptorRecord() != null) {
+      bean.setAirConditioned(status.getTfnswVehicleDescriptorRecord().isAirConditioned());
+      bean.setWheelchairAccessible(status.getTfnswVehicleDescriptorRecord().isWheelchairAccessible());
+    }
+
+    bean.setSpeed(record.getSpeed());
+    bean.setOdometer(record.getOdometer());
+    bean.setBearing(record.getBearing());
+
     return bean;
   }
 
@@ -278,6 +294,9 @@ class VehicleStatusBeanServiceImpl implements VehicleStatusBeanService {
     bean.setTimeOfRecord(record.getTimeOfRecord());
     bean.setTripId(AgencyAndIdLibrary.convertToString(record.getTripId()));
     bean.setVehicleId(AgencyAndIdLibrary.convertToString(record.getVehicleId()));
+    bean.setSpeed(record.getSpeed());
+    bean.setOdometer(record.getOdometer());
+    bean.setBearing(record.getBearing());
     return bean;
   }
 

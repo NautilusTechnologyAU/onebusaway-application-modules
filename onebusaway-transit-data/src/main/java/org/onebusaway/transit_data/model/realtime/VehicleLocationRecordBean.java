@@ -53,6 +53,12 @@ public class VehicleLocationRecordBean implements Serializable {
 
   private String status;
 
+  private float speed;
+
+  private double odometer;
+
+  private float bearing;
+
   public long getServiceDate() {
     return serviceDate;
   }
@@ -161,6 +167,30 @@ public class VehicleLocationRecordBean implements Serializable {
     this.status = status;
   }
 
+  public float getSpeed() {
+    return speed;
+  }
+
+  public void setSpeed(float speed) {
+    this.speed = speed;
+  }
+
+  public double getOdometer() {
+    return odometer;
+  }
+
+  public void setOdometer(double odometer) {
+    this.odometer = odometer;
+  }
+
+  public float getBearing() {
+    return bearing;
+  }
+
+  public void setBearing(float bearing) {
+    this.bearing = bearing;
+  }
+
   /**
    * All field values will be copied from the specified bean into our own bean.
    * 
@@ -179,5 +209,8 @@ public class VehicleLocationRecordBean implements Serializable {
     this.timeOfRecord = bean.timeOfRecord;
     this.tripId = bean.vehicleId;
     this.vehicleId = bean.vehicleId;
+    this.speed = bean.speed;
+    this.odometer = bean.odometer;
+    this.bearing = bean.bearing;
   }
 }

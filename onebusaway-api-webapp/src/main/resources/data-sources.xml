@@ -24,7 +24,7 @@
 
     <!-- Specify our transit data source -->
     <bean id="transitDataService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
-        <property name="serviceUrl" value="http://localhost:8080/onebusaway-transit-data-federation-webapp/remoting/transit-data-service" />
+        <property name="serviceUrl" value="${TRANSIT_DATA_SERVICE_URL}" />
         <property name="serviceInterface" value="org.onebusaway.transit_data.services.TransitDataService" />
     </bean>
 
@@ -33,21 +33,27 @@
      <!-- Database Configuration -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/onebusaway" />
-        <property name="username" value="root" />
-        <property name="password" value="root" />
+        <property name="url" value="jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;jdbcCompliantTruncation=false&amp;enabledTLSProtocols=TLSv1.2"/>
+        <property name="username" value="${DATABASE_USER}"/>
+        <property name="password" value="${DATABASE_PASSWORD}"/>
+    </bean>
+    <bean id="agencyMetadataDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;jdbcCompliantTruncation=false&amp;enabledTLSProtocols=TLSv1.2"/>
+        <property name="username" value="${DATABASE_USER}"/>
+        <property name="password" value="${DATABASE_PASSWORD}"/>
     </bean>
     <bean id="archiveDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/onebusaway" />
-        <property name="username" value="root" />
-        <property name="password" value="root" />
+        <property name="url" value="jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;jdbcCompliantTruncation=false&amp;enabledTLSProtocols=TLSv1.2"/>
+        <property name="username" value="${DATABASE_USER}"/>
+        <property name="password" value="${DATABASE_PASSWORD}"/>
     </bean>
     <bean id="agencyDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/onebusaway" />
-        <property name="username" value="root" />
-        <property name="password" value="root" />
+        <property name="url" value="jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;jdbcCompliantTruncation=false&amp;enabledTLSProtocols=TLSv1.2"/>
+        <property name="username" value="${DATABASE_USER}"/>
+        <property name="password" value="${DATABASE_PASSWORD}"/>
     </bean>
     
     <bean class="org.onebusaway.container.spring.PropertyOverrideConfigurer">
@@ -56,5 +62,8 @@
                 <prop key="cacheManager.cacheManagerName">org.onebusaway.api_webapp.cacheManager</prop>
             </props>
         </property>
+    </bean>
+    <bean class="org.onebusaway.users.impl.CreateApiKeyAction">
+        <property name="key" value="TEST"/>
     </bean>
 </beans>

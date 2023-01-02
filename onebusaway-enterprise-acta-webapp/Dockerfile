@@ -39,10 +39,10 @@ ENV API_BASE_URL='https://transit.nautilus-tech.com.au/onebusaway-api-webapp'
 ENV XWIKI_URL='https://xwiki.mymetro.au'
 ENV XWIKI_USERNAME=''
 ENV XWIKI_PASSWORD=''
-ENV JAVA_OPTS='-Xss4m -Duser.language=en -Duser.country=AU'
 ENV LANG="en_AU.UTF-8"
 ENV LANGUAGE="en_AU:en"
 ENV TIMEZONE="Australia/Adelaide"
+ENV JAVA_OPTS="-Xss4m -Duser.language=en -Duser.country=AU -Duser.timezone=${TIMEZONE}"
 
 # Copy the application files
 ADD "./target/${APP_NAME}.war" ${APP_PATH}/${APP_NAME}.war

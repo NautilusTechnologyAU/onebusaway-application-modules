@@ -1,0 +1,8 @@
+{
+  "oba": {
+    "env": "local",
+    "config": "local"
+  },
+  "config": [
+  ]
+}

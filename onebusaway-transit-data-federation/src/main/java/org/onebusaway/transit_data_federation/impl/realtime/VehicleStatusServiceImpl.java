@@ -20,12 +20,10 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
-import org.onebusaway.realtime.api.EVehiclePhase;
-import org.onebusaway.realtime.api.VehicleLocationListener;
-import org.onebusaway.realtime.api.VehicleLocationRecord;
-import org.onebusaway.realtime.api.VehicleOccupancyListener;
-import org.onebusaway.realtime.api.VehicleOccupancyRecord;
+import org.onebusaway.realtime.api.*;
 import org.onebusaway.transit_data.model.TransitDataConstants;
+import org.onebusaway.transit_data_federation.impl.realtime.gtfs_realtime.GtfsRealtimeSource;
+import org.onebusaway.transit_data_federation.impl.realtime.tfnsw.TfnswVehicleDescriptorRecordCache;
 import org.onebusaway.transit_data_federation.services.AgencyService;
 import org.onebusaway.transit_data_federation.services.blocks.BlockVehicleLocationListener;
 import org.onebusaway.transit_data_federation.services.realtime.VehicleLocationCacheElement;
@@ -37,14 +35,16 @@ import org.onebusaway.transit_data_federation.impl.realtime.apc.VehicleOccupancy
 import org.onebusaway.transit_data_federation.services.transit_graph.BlockEntry;
 import org.onebusaway.transit_data_federation.services.transit_graph.TransitGraphDao;
 import org.onebusaway.transit_data_federation.services.transit_graph.TripEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 class VehicleStatusServiceImpl implements VehicleLocationListener,
-        VehicleOccupancyListener,
-    VehicleStatusService {
+        VehicleOccupancyListener, TfnswVehicleDescriptorListener, VehicleStatusService {
 
+  private static final Logger _log = LoggerFactory.getLogger(VehicleStatusServiceImpl.class);
   private ConcurrentHashMap<AgencyAndId, VehicleLocationRecord> _vehicleRecordsById = new ConcurrentHashMap<AgencyAndId, VehicleLocationRecord>();
 
   private TransitGraphDao _transitGraphDao;
@@ -54,6 +54,8 @@ class VehicleStatusServiceImpl implements VehicleLocationListener,
   private VehicleLocationRecordCache _vehicleLocationRecordCache;
 
   private VehicleOccupancyRecordCache _vehicleOccupanycRecordCache;
+
+  private TfnswVehicleDescriptorRecordCache _tfnswVehicleDescriptorRecordCache;
 
   private AgencyService _agencyService;
 
@@ -81,6 +83,12 @@ class VehicleStatusServiceImpl implements VehicleLocationListener,
   }
 
   @Autowired
+  public void setTfnswVehicleDescriptorRecordCache(
+          TfnswVehicleDescriptorRecordCache tfnswVehicleDescriptorRecordCache) {
+    _tfnswVehicleDescriptorRecordCache = tfnswVehicleDescriptorRecordCache;
+  }
+
+  @Autowired
   public void setAgencyService(AgencyService agencyService) {
     _agencyService = agencyService;
   }
@@ -100,8 +108,10 @@ class VehicleStatusServiceImpl implements VehicleLocationListener,
     if (record.getTimeOfRecord() == 0)
       throw new IllegalArgumentException("you must specify a record time");
 
-    if( record.getVehicleId() != null)
+    if( record.getVehicleId() != null) {
       _vehicleRecordsById.put(record.getVehicleId(), record);
+      _vehicleLocationRecordCache.addRawPosition(record.getVehicleId(), record);
+    }
 
     AgencyAndId blockId = record.getBlockId();
 
@@ -158,7 +168,7 @@ class VehicleStatusServiceImpl implements VehicleLocationListener,
     _blockVehicleLocationService.resetVehicleLocation(vehicleId);
   }
 
-  public void handleRawPosition(AgencyAndId vehicle, double lat, double lon, long timestamp) {
+  public void handleRawPosition(AgencyAndId vehicle, double lat, double lon, long timestamp, float speed, double odometer, float bearing) {
     VehicleLocationRecord record = new VehicleLocationRecord();
     record.setVehicleId(vehicle);
     record.setCurrentLocationLat(lat);
@@ -169,6 +179,9 @@ class VehicleStatusServiceImpl implements VehicleLocationListener,
     record.setScheduleDeviation(-999.);
     record.setDistanceAlongBlock(-999.);
     record.setCurrentOrientation(-999.);
+    record.setSpeed(speed);
+    record.setOdometer(odometer);
+    record.setBearing(bearing);
     _vehicleLocationRecordCache.addRawPosition(vehicle, record);
   }
 
@@ -198,6 +211,7 @@ class VehicleStatusServiceImpl implements VehicleLocationListener,
     status.setRecord(record);
     status.setAllRecords(records);
     status.setOccupancyRecord(_vehicleOccupanycRecordCache.getLastRecordForVehicleId(vehicleId));
+    status.setTfnswVehicleDescriptorRecord(_tfnswVehicleDescriptorRecordCache.getLastRecordForVehicleId(vehicleId));
 
     return status;
   }
@@ -210,7 +224,18 @@ class VehicleStatusServiceImpl implements VehicleLocationListener,
       status.setRecord(record);
       statuses.add(status);
       status.setOccupancyRecord(_vehicleOccupanycRecordCache.getLastRecordForVehicleId(record.getVehicleId()));
+      status.setTfnswVehicleDescriptorRecord(_tfnswVehicleDescriptorRecordCache.getLastRecordForVehicleId(record.getVehicleId()));
     }
     return statuses;
+  }
+
+  @Override
+  public void handleTfnswVehicleDescriptor(TfnswVehicleDescriptorRecord record) {
+    _tfnswVehicleDescriptorRecordCache.addRecord(record);
+  }
+
+  @Override
+  public void resetTfnswVehicleDescriptor(AgencyAndId vehicleId) {
+    _tfnswVehicleDescriptorRecordCache.clearRecordForVehicle(vehicleId);
   }
 }

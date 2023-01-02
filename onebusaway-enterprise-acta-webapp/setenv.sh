@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 sed -i 's@${TRANSIT_DATA_SERVICE_URL}@'"$TRANSIT_DATA_SERVICE_URL"'@g' ${APP_PATH}/WEB-INF/classes/data-sources.xml
 sed -i 's@${XWIKI_URL}@'"$XWIKI_URL"'@g' ${APP_PATH}/WEB-INF/classes/data-sources.xml
 sed -i 's/${XWIKI_USERNAME}/'"$XWIKI_USERNAME"'/g' ${APP_PATH}/WEB-INF/classes/data-sources.xml

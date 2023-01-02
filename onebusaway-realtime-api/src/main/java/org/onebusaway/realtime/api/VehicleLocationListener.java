@@ -34,6 +34,6 @@ public interface VehicleLocationListener {
   
   public void resetVehicleLocation(AgencyAndId vehicleId);
 
-  public void handleRawPosition(AgencyAndId vehicleId, double lat, double lon, long timestamp);
+  public void handleRawPosition(AgencyAndId vehicleId, double lat, double lon, long timestamp, float speed, double odometer, float bearing);
 
 }

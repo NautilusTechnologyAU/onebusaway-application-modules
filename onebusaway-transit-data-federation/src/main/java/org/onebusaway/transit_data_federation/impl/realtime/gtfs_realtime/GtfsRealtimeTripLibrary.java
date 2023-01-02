@@ -30,6 +30,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import com.google.transit.realtime.GtfsRealtime;
+import com.google.transit.realtime.GtfsRealtimeAdelaideMetro;
 import org.apache.commons.lang.StringUtils;
 import org.onebusaway.collections.MappingLibrary;
 import org.onebusaway.collections.Min;
@@ -38,10 +40,7 @@ import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.gtfs.model.calendar.ServiceDate;
 import org.onebusaway.gtfs.serialization.mappings.InvalidStopTimeException;
 import org.onebusaway.gtfs.serialization.mappings.StopTimeFieldMappingFactory;
-import org.onebusaway.realtime.api.OccupancyStatus;
-import org.onebusaway.realtime.api.TimepointPredictionRecord;
-import org.onebusaway.realtime.api.VehicleLocationRecord;
-import org.onebusaway.realtime.api.VehicleOccupancyRecord;
+import org.onebusaway.realtime.api.*;
 import org.onebusaway.transit_data_federation.services.blocks.BlockCalendarService;
 import org.onebusaway.transit_data_federation.services.blocks.BlockGeospatialService;
 import org.onebusaway.transit_data_federation.services.blocks.BlockInstance;
@@ -1014,6 +1013,16 @@ public class GtfsRealtimeTripLibrary {
     }
     record.setCurrentLocationLat(position.getLatitude());
     record.setCurrentLocationLon(position.getLongitude());
+    if (position.hasSpeed()) {
+      _log.debug("Position has speed: " + position.getSpeed());
+      record.setSpeed(position.getSpeed());
+    }
+    if (position.hasOdometer()) {
+      record.setOdometer(position.getOdometer());
+    }
+    if (position.hasBearing()) {
+      record.setBearing(position.getBearing());
+    }
     if (result != null) {
       result.addLatLon(position.getLatitude(), position.getLongitude());
     }
@@ -1097,6 +1106,33 @@ public class GtfsRealtimeTripLibrary {
       }
       return null;
     }
+
+  public TfnswVehicleDescriptorRecord createTfnswVehicleDescriptorRecordForUpdate(MonitoredResult result,
+                                                                      CombinedTripUpdatesAndVehiclePosition update) {
+    if (update == null || update.vehiclePosition == null) {
+      return null;
+    }
+    TfnswVehicleDescriptorRecord record = new TfnswVehicleDescriptorRecord();
+    record.setVehicleId(new AgencyAndId(update.block.getBlockInstance().getBlock().getBlock().getId().getAgencyId(), update.block.getVehicleId()));
+    if (update.vehiclePosition.hasVehicle()) {
+      GtfsRealtime.VehicleDescriptor vd = update.vehiclePosition.getVehicle();
+      if (vd.hasExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor)) {
+        GtfsRealtimeAdelaideMetro.TfnswVehicleDescriptor desc = vd.getExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor);
+        if (desc.hasWheelchairAccessible() && desc.getWheelchairAccessible() == 1) {
+          record.setWheelchairAccessible(true);
+        } else {
+          record.setWheelchairAccessible(false);
+        }
+        if (desc.hasAirConditioned()) {
+          record.setAirConditioned(desc.getAirConditioned());
+        } else {
+          record.setAirConditioned(false);
+        }
+      }
+    }
+
+    return record;
+  }
 
     private static class BestScheduleDeviation {
     public int delta = Integer.MAX_VALUE;

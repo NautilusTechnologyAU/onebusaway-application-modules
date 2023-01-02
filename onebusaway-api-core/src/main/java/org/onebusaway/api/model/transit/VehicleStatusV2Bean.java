@@ -46,6 +46,16 @@ public final class VehicleStatusV2Bean implements Serializable {
 
   private TripStatusV2Bean tripStatus;
 
+  private boolean airConditioned;
+
+  private boolean wheelchairAccessible;
+
+  private float speed;
+
+  private double odometer;
+
+  private float bearing;
+
   public String getVehicleId() {
     return vehicleId;
   }
@@ -133,4 +143,43 @@ public final class VehicleStatusV2Bean implements Serializable {
     this.tripStatus = tripStatus;
   }
 
+  public boolean isAirConditioned() {
+    return airConditioned;
+  }
+
+  public void setAirConditioned(boolean airConditioned) {
+    this.airConditioned = airConditioned;
+  }
+
+  public boolean isWheelchairAccessible() {
+    return wheelchairAccessible;
+  }
+
+  public void setWheelchairAccessible(boolean wheelchairAccessible) {
+    this.wheelchairAccessible = wheelchairAccessible;
+  }
+
+  public float getSpeed() {
+    return speed;
+  }
+
+  public void setSpeed(float speed) {
+    this.speed = speed;
+  }
+
+  public double getOdometer() {
+    return odometer;
+  }
+
+  public void setOdometer(double odometer) {
+    this.odometer = odometer;
+  }
+
+  public float getBearing() {
+    return bearing;
+  }
+
+  public void setBearing(float bearing) {
+    this.bearing = bearing;
+  }
 }

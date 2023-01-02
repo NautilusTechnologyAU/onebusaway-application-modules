@@ -40,6 +40,12 @@ public class VehicleLocationRecordV2Bean implements Serializable {
 
   private long timeOfLocationUpdate;
 
+  private float speed;
+
+  private double odometer;
+
+  private float bearing;
+
   /**
    * schedule deviation, in seconds, (+deviation is late, -deviation is early)
    */
@@ -158,5 +164,29 @@ public class VehicleLocationRecordV2Bean implements Serializable {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public float getSpeed() {
+    return speed;
+  }
+
+  public void setSpeed(float speed) {
+    this.speed = speed;
+  }
+
+  public double getOdometer() {
+    return odometer;
+  }
+
+  public void setOdometer(double odometer) {
+    this.odometer = odometer;
+  }
+
+  public float getBearing() {
+    return bearing;
+  }
+
+  public void setBearing(float bearing) {
+    this.bearing = bearing;
   }
 }

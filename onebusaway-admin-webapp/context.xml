@@ -40,12 +40,14 @@
               username="${DATABASE_USER}" password="${DATABASE_PASSWORD}" driverClassName="com.mysql.jdbc.Driver"
               url="jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;jdbcCompliantTruncation=false&amp;enabledTLSProtocols=TLSv1.2"/>
 
+    <!--
     <Parameter name="file.bundle.bucketName" value="/oba/bundles/builder" override="false"/>
     <Parameter name="config.json" value="/oba/config.json" override="false"/>
     <Parameter name="server.url" value="${SERVER_URL}" override="false"/>
-    <!--
-    <Parameter name="admin.instanceId" value="transit.nautilus-tech.com.au" override="false" />
-    <Parameter name="admin.port" value="8080" override="false" />
-    <Parameter name="admin.context" value="onebusaway-admin-webapp" override="false" />
     -->
+    <Parameter name="config.json" value="/oba/config.json" override="false"/>
+    <Parameter name="file.bundle.bucketName" value="/oba/bundles/builder" override="false" />
+    <Parameter name="admin.instanceId" value="localhost" override="false" />
+    <Parameter name="admin.port" value="9999" override="false" />
+    <Parameter name="admin.context" value="api" override="false" />
 </Context>

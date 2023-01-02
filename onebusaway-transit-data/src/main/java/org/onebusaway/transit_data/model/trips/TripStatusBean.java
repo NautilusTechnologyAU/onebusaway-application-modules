@@ -78,7 +78,10 @@ public final class TripStatusBean implements Serializable {
   private int previousStopTimeOffset;
   
   private double previousStopDistanceFromVehicle;
-  
+
+  private boolean airConditioned = Boolean.FALSE;
+
+  private boolean wheelchairAccessible = Boolean.FALSE;
 
   /****
    * These are fields that we can supply only from real-time data
@@ -103,6 +106,12 @@ public final class TripStatusBean implements Serializable {
   private List<ServiceAlertBean> situations;
 
   private List<TimepointPredictionBean> timepointPredictions;
+
+  private float speed;
+
+  private double odometer;
+
+  private float bearing;
 
   public TripBean getActiveTrip() {
     return activeTrip;
@@ -417,5 +426,45 @@ public void setPreviousStopDistanceFromVehicle(
 
   public void setTimepointPredictions(List<TimepointPredictionBean> timepointPredictions) {
     this.timepointPredictions = timepointPredictions;
+  }
+
+  public boolean isAirConditioned() {
+    return airConditioned;
+  }
+
+  public void setAirConditioned(boolean airConditioned) {
+    this.airConditioned = airConditioned;
+  }
+
+  public boolean isWheelchairAccessible() {
+    return wheelchairAccessible;
+  }
+
+  public void setWheelchairAccessible(boolean wheelchairAccessible) {
+    this.wheelchairAccessible = wheelchairAccessible;
+  }
+
+  public float getSpeed() {
+    return speed;
+  }
+
+  public void setSpeed(float speed) {
+    this.speed = speed;
+  }
+
+  public double getOdometer() {
+    return odometer;
+  }
+
+  public void setOdometer(double odometer) {
+    this.odometer = odometer;
+  }
+
+  public float getBearing() {
+    return bearing;
+  }
+
+  public void setBearing(float bearing) {
+    this.bearing = bearing;
   }
 }

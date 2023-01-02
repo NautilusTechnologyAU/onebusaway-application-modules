@@ -16,17 +16,8 @@
  */
 package org.onebusaway.api.model.transit;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import org.onebusaway.api.impl.MaxCountSupport;
-import org.onebusaway.api.model.transit.blocks.BlockConfigurationV2Bean;
-import org.onebusaway.api.model.transit.blocks.BlockInstanceV2Bean;
-import org.onebusaway.api.model.transit.blocks.BlockStopTimeV2Bean;
-import org.onebusaway.api.model.transit.blocks.BlockTripV2Bean;
-import org.onebusaway.api.model.transit.blocks.BlockV2Bean;
+import org.onebusaway.api.model.transit.blocks.*;
 import org.onebusaway.api.model.transit.realtime.CurrentVehicleEstimateV2Bean;
 import org.onebusaway.api.model.transit.schedule.StopTimeV2Bean;
 import org.onebusaway.api.model.transit.service_alerts.*;
@@ -37,27 +28,23 @@ import org.onebusaway.realtime.api.OccupancyStatus;
 import org.onebusaway.transit_data.HistoricalRidershipBean;
 import org.onebusaway.transit_data.OccupancyStatusBean;
 import org.onebusaway.transit_data.model.*;
-import org.onebusaway.transit_data.model.blocks.BlockBean;
-import org.onebusaway.transit_data.model.blocks.BlockConfigurationBean;
-import org.onebusaway.transit_data.model.blocks.BlockInstanceBean;
-import org.onebusaway.transit_data.model.blocks.BlockStopTimeBean;
-import org.onebusaway.transit_data.model.blocks.BlockTripBean;
+import org.onebusaway.transit_data.model.blocks.*;
 import org.onebusaway.transit_data.model.config.BundleMetadata;
 import org.onebusaway.transit_data.model.realtime.CurrentVehicleEstimateBean;
 import org.onebusaway.transit_data.model.realtime.VehicleLocationRecordBean;
 import org.onebusaway.transit_data.model.schedule.FrequencyBean;
 import org.onebusaway.transit_data.model.schedule.FrequencyInstanceBean;
 import org.onebusaway.transit_data.model.schedule.StopTimeBean;
-import org.onebusaway.transit_data.model.service_alerts.ESeverity;
-import org.onebusaway.transit_data.model.service_alerts.NaturalLanguageStringBean;
-import org.onebusaway.transit_data.model.service_alerts.ServiceAlertBean;
-import org.onebusaway.transit_data.model.service_alerts.SituationAffectsBean;
-import org.onebusaway.transit_data.model.service_alerts.SituationConsequenceBean;
-import org.onebusaway.transit_data.model.service_alerts.TimeRangeBean;
+import org.onebusaway.transit_data.model.service_alerts.*;
 import org.onebusaway.transit_data.model.trips.TripBean;
 import org.onebusaway.transit_data.model.trips.TripDetailsBean;
 import org.onebusaway.transit_data.model.trips.TripStatusBean;
 import org.onebusaway.util.AgencyAndIdLibrary;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BeanFactoryV2 {
 
@@ -419,6 +406,13 @@ public class BeanFactoryV2 {
       bean.setSituationIds(situationIds);
     }
 
+    bean.setAirConditioned(tripStatus.isAirConditioned());
+    bean.setWheelchairAccessible(tripStatus.isWheelchairAccessible());
+    bean.setSpeed(tripStatus.getSpeed());
+    bean.setOdometer(tripStatus.getOdometer());
+    bean.setBearing(tripStatus.getBearing());
+
+
     return bean;
   }
 
@@ -647,6 +641,12 @@ public class BeanFactoryV2 {
     if (tripStatus != null)
       bean.setTripStatus(getTripStatus(tripStatus));
 
+    bean.setAirConditioned(vehicleStatus.isAirConditioned());
+    bean.setWheelchairAccessible(vehicleStatus.isWheelchairAccessible());
+    bean.setSpeed(vehicleStatus.getSpeed());
+    bean.setOdometer(vehicleStatus.getOdometer());
+    bean.setBearing(vehicleStatus.getBearing());
+
     return bean;
   }
 
@@ -670,6 +670,9 @@ public class BeanFactoryV2 {
     bean.setTimeOfLocationUpdate(record.getTimeOfLocationUpdate());
     bean.setTripId(record.getTripId());
     bean.setVehicleId(record.getVehicleId());
+    bean.setSpeed(record.getSpeed());
+    bean.setOdometer(record.getOdometer());
+    bean.setBearing(record.getBearing());
     return bean;
   }
 

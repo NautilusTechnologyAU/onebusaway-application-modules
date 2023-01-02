@@ -9,6 +9,8 @@
     {"component": "admin", "key": "admin.auxSupport", "value": "false"},
     {"component": "admin", "key": "admin.stopConsolidation", "value": "true"},
     {"component": "admin", "key": "admin.instanceId", "value": "localhost"},
+    {"component": "admin", "key": "adminStaging", "value": "http://localhost"},
+    {"component": "admin", "key": "adminStagingPort", "value": "8080"},
     {"component": "admin", "key": "bundleStagingDir", "value": "/oba/bundles/staged"},
     {"component": "admin", "key": "showApiKey", "value": "true"},
     {"component": "admin", "key": "showManageUsers", "value": "true"},
@@ -22,6 +24,7 @@
     {"component": "admin", "key": "no_default_agency", "value": "true"},
     {"component": "admin", "key": "Hillsborough Area Regional Transit_modurl", "value": "https://raw.github.com/wiki/camsys/onebusaway-application-modules/EmptyModifications.md"},
     {"component": "privilege", "key": "ROLE_ADMINISTRATOR", "value": "*"},
+    {"component": "agency", "key":"1", "value":"Hillsborough Area Regional Transit,1"},
     {"component": "display", "key": "display.googleMapsApiKey", "value": "${GOOGLE_MAPS_API_KEY}"}
   ]
 }

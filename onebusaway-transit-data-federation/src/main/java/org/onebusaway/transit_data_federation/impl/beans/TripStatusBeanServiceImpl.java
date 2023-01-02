@@ -17,50 +17,33 @@
  */
 package org.onebusaway.transit_data_federation.impl.beans;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.onebusaway.gtfs.model.AgencyAndId;
-import org.onebusaway.realtime.api.EVehiclePhase;
-import org.onebusaway.realtime.api.TimepointPredictionRecord;
-import org.onebusaway.realtime.api.VehicleOccupancyRecord;
+import org.onebusaway.realtime.api.*;
 import org.onebusaway.transit_data.model.ListBean;
 import org.onebusaway.transit_data.model.StopBean;
 import org.onebusaway.transit_data.model.TripStopTimesBean;
 import org.onebusaway.transit_data.model.schedule.FrequencyBean;
 import org.onebusaway.transit_data.model.service_alerts.ServiceAlertBean;
-import org.onebusaway.transit_data.model.trips.TimepointPredictionBean;
-import org.onebusaway.transit_data.model.trips.TripBean;
-import org.onebusaway.transit_data.model.trips.TripDetailsBean;
-import org.onebusaway.transit_data.model.trips.TripDetailsInclusionBean;
-import org.onebusaway.transit_data.model.trips.TripDetailsQueryBean;
-import org.onebusaway.transit_data.model.trips.TripStatusBean;
-import org.onebusaway.transit_data.model.trips.TripsForAgencyQueryBean;
-import org.onebusaway.transit_data.model.trips.TripsForBoundsQueryBean;
-import org.onebusaway.transit_data.model.trips.TripsForRouteQueryBean;
+import org.onebusaway.transit_data.model.trips.*;
 import org.onebusaway.transit_data_federation.impl.realtime.apc.VehicleOccupancyRecordCache;
-import org.onebusaway.util.AgencyAndIdLibrary;
-import org.onebusaway.transit_data_federation.services.beans.ServiceAlertsBeanService;
-import org.onebusaway.transit_data_federation.services.beans.StopBeanService;
-import org.onebusaway.transit_data_federation.services.beans.TripBeanService;
-import org.onebusaway.transit_data_federation.services.beans.TripDetailsBeanService;
-import org.onebusaway.transit_data_federation.services.beans.TripStopTimesBeanService;
+import org.onebusaway.transit_data_federation.impl.realtime.tfnsw.TfnswVehicleDescriptorRecordCache;
+import org.onebusaway.transit_data_federation.services.beans.*;
 import org.onebusaway.transit_data_federation.services.blocks.BlockInstance;
 import org.onebusaway.transit_data_federation.services.blocks.BlockStatusService;
 import org.onebusaway.transit_data_federation.services.blocks.BlockTripInstance;
 import org.onebusaway.transit_data_federation.services.blocks.BlockTripInstanceLibrary;
 import org.onebusaway.transit_data_federation.services.realtime.BlockLocation;
-import org.onebusaway.transit_data_federation.services.transit_graph.BlockStopTimeEntry;
-import org.onebusaway.transit_data_federation.services.transit_graph.BlockTripEntry;
-import org.onebusaway.transit_data_federation.services.transit_graph.FrequencyEntry;
-import org.onebusaway.transit_data_federation.services.transit_graph.StopTimeEntry;
-import org.onebusaway.transit_data_federation.services.transit_graph.TransitGraphDao;
-import org.onebusaway.transit_data_federation.services.transit_graph.TripEntry;
+import org.onebusaway.transit_data_federation.services.realtime.VehicleLocationRecordCache;
+import org.onebusaway.transit_data_federation.services.transit_graph.*;
+import org.onebusaway.util.AgencyAndIdLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
@@ -80,6 +63,10 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
   private ServiceAlertsBeanService _serviceAlertBeanService;
 
   private VehicleOccupancyRecordCache _vehicleOccupancyRecordCache;
+
+  private TfnswVehicleDescriptorRecordCache _tfnswVehicleDescriptorRecordCache;
+
+  private VehicleLocationRecordCache _vehicleLocationRecordCache;
 
   @Autowired
   public void setTransitGraphDao(TransitGraphDao transitGraphDao) {
@@ -117,6 +104,19 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
   public void setVehicleOccupancyRecordCache(VehicleOccupancyRecordCache cache) {
     this._vehicleOccupancyRecordCache = cache;
   }
+
+  @Autowired
+  public void setTfnswVehicleDescriptorRecordCache(TfnswVehicleDescriptorRecordCache cache) {
+    _tfnswVehicleDescriptorRecordCache = cache;
+  }
+
+  @Autowired
+  public void setVehicleLocationRecordCache(
+          VehicleLocationRecordCache vehicleLocationRecordCache) {
+    _vehicleLocationRecordCache = vehicleLocationRecordCache;
+  }
+
+
   /****
    * {@link TripDetailsBeanService} Interface
    ****/
@@ -361,6 +361,23 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
               blockLocation.getActiveTrip().getTrip().getDirectionId());
       if (vor != null)
         bean.setOccupancyStatus(vor.getOccupancyStatus());
+    }
+
+    if (_tfnswVehicleDescriptorRecordCache != null && blockLocation.getVehicleId() != null) {
+      TfnswVehicleDescriptorRecord vdr = _tfnswVehicleDescriptorRecordCache.getLastRecordForVehicleId(blockLocation.getVehicleId());
+      if (vdr != null) {
+        bean.setAirConditioned(vdr.isAirConditioned());
+        bean.setWheelchairAccessible(vdr.isWheelchairAccessible());
+      }
+    }
+
+    if (_vehicleLocationRecordCache != null && blockLocation.getVehicleId() != null) {
+      VehicleLocationRecord rawPosition = _vehicleLocationRecordCache.getRawPosition(blockLocation.getVehicleId());
+      if (rawPosition != null) {
+        bean.setSpeed(rawPosition.getSpeed());
+        bean.setOdometer(rawPosition.getOdometer());
+        bean.setBearing(rawPosition.getBearing());
+      }
     }
 
     return bean;

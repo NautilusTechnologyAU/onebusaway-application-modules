@@ -82,6 +82,12 @@ public class VehicleLocationRecord implements Serializable {
 
   private String status;
 
+  private float speed;
+
+  private double odometer;
+
+  private float bearing;
+
   public VehicleLocationRecord() {
 
   }
@@ -98,11 +104,14 @@ public class VehicleLocationRecord implements Serializable {
     this.serviceDate = r.serviceDate;
     this.tripId = r.tripId;
     this.vehicleId = r.vehicleId;
+    this.bearing = r.bearing;
+    this.speed = r.speed;
+    this.odometer = r.odometer;
 
     List<TimepointPredictionRecord> timepointPredictions = r.getTimepointPredictions();
     if (timepointPredictions != null) {
       List<TimepointPredictionRecord> dup = new ArrayList<TimepointPredictionRecord>(
-          timepointPredictions.size());
+              timepointPredictions.size());
       for (TimepointPredictionRecord tpr : timepointPredictions)
         dup.add(new TimepointPredictionRecord(tpr));
       this.timepointPredictions = dup;
@@ -150,7 +159,6 @@ public class VehicleLocationRecord implements Serializable {
   }
 
   /**
-   * 
    * @return time when the vehicle location record was made, in unix-time (ms)
    */
   public long getTimeOfRecord() {
@@ -158,16 +166,14 @@ public class VehicleLocationRecord implements Serializable {
   }
 
   /**
-   * 
    * @param timeOfRecord time when the vehicle location record was made, in
-   *          unix-time (ms)
+   *                     unix-time (ms)
    */
   public void setTimeOfRecord(long timeOfRecord) {
     this.timeOfRecord = timeOfRecord;
   }
 
   /**
-   * 
    * @return time when the last vehicle location update made, in unix-time (ms)
    */
   public long getTimeOfLocationUpdate() {
@@ -186,18 +192,16 @@ public class VehicleLocationRecord implements Serializable {
   }
 
   /**
-   * 
    * @return schedule deviation, in seconds, (+deviation is late, -deviation is
-   *         early)
+   * early)
    */
   public double getScheduleDeviation() {
     return scheduleDeviation;
   }
 
   /**
-   * 
    * @param scheduleDeviation - in seconds (+deviation is late, -deviation is
-   *          early)
+   *                          early)
    */
   public void setScheduleDeviation(double scheduleDeviation) {
     this.scheduleDeviation = scheduleDeviation;
@@ -208,7 +212,6 @@ public class VehicleLocationRecord implements Serializable {
   }
 
   /**
-   * 
    * @return the distance traveled along the block in meters, or NaN if not set
    */
   public double getDistanceAlongBlock() {
@@ -216,9 +219,8 @@ public class VehicleLocationRecord implements Serializable {
   }
 
   /**
-   * 
    * @param distanceAlongBlock distance traveled along the block in meters, or
-   *          NaN if not set
+   *                           NaN if not set
    */
   public void setDistanceAlongBlock(double distanceAlongBlock) {
     this.distanceAlongBlock = distanceAlongBlock;
@@ -264,7 +266,7 @@ public class VehicleLocationRecord implements Serializable {
   }
 
   public void setTimepointPredictions(
-      List<TimepointPredictionRecord> timepointPredictions) {
+          List<TimepointPredictionRecord> timepointPredictions) {
     this.timepointPredictions = timepointPredictions;
   }
 
@@ -283,6 +285,30 @@ public class VehicleLocationRecord implements Serializable {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public float getSpeed() {
+    return speed;
+  }
+
+  public void setSpeed(float speed) {
+    this.speed = speed;
+  }
+
+  public double getOdometer() {
+    return odometer;
+  }
+
+  public void setOdometer(double odometer) {
+    this.odometer = odometer;
+  }
+
+  public float getBearing() {
+    return bearing;
+  }
+
+  public void setBearing(float bearing) {
+    this.bearing = bearing;
   }
 
   @Override
@@ -305,13 +331,17 @@ public class VehicleLocationRecord implements Serializable {
       b.append(" distanceAlongBlock=").append(distanceAlongBlock);
     if (isCurrentLocationSet())
       b.append(" currentLocation=").append(currentLocationLat).append(" ").append(
-          currentLocationLon);
+              currentLocationLon);
     if (isCurrentOrientationSet())
       b.append(" currentOrientation=").append(currentOrientation);
     if (phase != null)
       b.append(" phase=").append(phase);
     if (status != null)
       b.append(" status=").append(status);
+
+    b.append(" speed=").append(speed);
+    b.append(" bearing=").append(bearing);
+    b.append(" odometer=").append(odometer);
     return b.toString();
   }
 }

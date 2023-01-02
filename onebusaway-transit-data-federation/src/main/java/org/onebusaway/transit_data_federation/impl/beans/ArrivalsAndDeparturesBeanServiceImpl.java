@@ -18,6 +18,7 @@ package org.onebusaway.transit_data_federation.impl.beans;
 
 import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.realtime.api.OccupancyStatus;
+import org.onebusaway.realtime.api.TfnswVehicleDescriptorRecord;
 import org.onebusaway.realtime.api.VehicleOccupancyRecord;
 import org.onebusaway.transit_data.model.ArrivalAndDepartureBean;
 import org.onebusaway.transit_data.model.ArrivalsAndDeparturesQueryBean;
@@ -29,6 +30,7 @@ import org.onebusaway.transit_data.model.trips.TripBean;
 import org.onebusaway.transit_data.model.trips.TripStatusBean;
 import org.onebusaway.transit_data_federation.impl.realtime.apc.VehicleOccupancyRecordCache;
 import org.onebusaway.transit_data_federation.impl.realtime.gtfs_realtime.GtfsRealtimeNegativeArrivals;
+import org.onebusaway.transit_data_federation.impl.realtime.tfnsw.TfnswVehicleDescriptorRecordCache;
 import org.onebusaway.transit_data_federation.model.TargetTime;
 import org.onebusaway.transit_data_federation.model.bundle.HistoricalRidership;
 import org.onebusaway.transit_data_federation.model.narrative.StopTimeNarrative;
@@ -86,7 +88,7 @@ public class ArrivalsAndDeparturesBeanServiceImpl implements
   private RidershipService _ridershipService;
 
   private VehicleOccupancyRecordCache _vehicleOccupancyRecordCache;
-  
+
   @Autowired
   public void setTransitGraphDao(TransitGraphDao transitGraphDao) {
     _transitGraphDao = transitGraphDao;
@@ -396,8 +398,6 @@ public class ArrivalsAndDeparturesBeanServiceImpl implements
         if (vor != null)
           bean.setOccupancyStatus(vor.getOccupancyStatus());
       }
-
-
     }
 
     TripStatusBean tripStatusBean = _tripDetailsBeanService.getBlockLocationAsStatusBean(
