@@ -56,6 +56,9 @@ public class StopSearchServiceImpl implements StopSearchService {
 
   private static String[] NAME_FIELDS = {StopSearchIndexConstants.FIELD_STOP_NAME};
 
+
+  private static String[] ALL_FIELDS = {StopSearchIndexConstants.FIELD_STOP_ID, StopSearchIndexConstants.FIELD_STOP_CODE, StopSearchIndexConstants.FIELD_STOP_NAME};
+
   private FederatedTransitDataBundle _bundle;
 
   private IndexSearcher _searcher;
@@ -90,6 +93,13 @@ public class StopSearchServiceImpl implements StopSearchService {
       ParseException {
     return search(new MultiFieldQueryParser(NAME_FIELDS, _analyzer), name,
         maxResultCount, minScoreToKeep);
+  }
+
+  public SearchResult<AgencyAndId> searchForStops(String query,
+                                                        int maxResultCount, double minScoreToKeep) throws IOException,
+          ParseException {
+    return search(new MultiFieldQueryParser(ALL_FIELDS, _analyzer), query,
+            maxResultCount, minScoreToKeep);
   }
 
   private SearchResult<AgencyAndId> search(QueryParser parser, String value,

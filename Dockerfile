@@ -26,8 +26,8 @@ LABEL org.opencontainers.image.title='OneBusAway Combined Apps' \
 
 ENV LANG="en_AU.UTF-8"
 ENV LANGUAGE="en_AU:en"
-ENV TIMEZONE="Australia/Brisbane"
-ENV JAVA_OPTS="-Xss4m -Duser.language=en -Duser.country=AU -Duser.timezone=${TIMEZONE}"
+ENV TIMEZONE="Australia/Adelaide"
+ENV JAVA_OPTS="-Xss4m -Duser.language=en-au -Duser.country=AU -Duser.timezone=${TIMEZONE}"
 
 # Setup timezone and language
 RUN locale-gen ${LANG} && \
@@ -61,5 +61,10 @@ WORKDIR ${WEB_APP_HOME}
 ADD "./${WEB_APP_NAME}/target/${WEB_APP_NAME}.war" "${WEB_APP_HOME}/${WEB_APP_NAME}.war"
 RUN jar -xvf ${WEB_APP_NAME}.war && \
     rm ${WEB_APP_HOME}/${WEB_APP_NAME}.war
+
+ADD ./conf/${DATA_APP_NAME}-data-sources.xml ${CATALINA_HOME}/webapps/${DATA_APP_NAME}/WEB-INF/classes/data-sources.xml
+ADD ./conf/${API_APP_NAME}-data-sources.xml ${CATALINA_HOME}/webapps/${API_APP_NAME}/WEB-INF/classes/data-sources.xml
+ADD ./conf/${WEB_APP_NAME}-data-sources.xml ${CATALINA_HOME}/webapps/ROOT/WEB-INF/classes/data-sources.xml
+
 
 WORKDIR ${CATALINA_HOME}
