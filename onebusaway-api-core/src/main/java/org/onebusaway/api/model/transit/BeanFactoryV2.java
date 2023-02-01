@@ -1208,7 +1208,7 @@ public class BeanFactoryV2 {
        * To better match the language, we let Locale handle canonicalization
        */
       Locale locale = new Locale(lang);
-      if (locale.getLanguage().equals(_locale.getLanguage()))
+      if (locale.getLanguage().equalsIgnoreCase(_locale.getLanguage()))
         return getString(nls);
     }
 

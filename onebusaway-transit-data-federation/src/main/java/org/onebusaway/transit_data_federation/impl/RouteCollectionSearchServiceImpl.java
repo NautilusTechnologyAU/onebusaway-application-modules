@@ -66,8 +66,11 @@ public class RouteCollectionSearchServiceImpl implements
           = new StandardAnalyzer(new CharArraySet(Arrays.asList(ENGLISH_STOP_WORDS), true));
 
   private static String[] NAME_FIELDS = {
+      RouteCollectionSearchIndexConstants.FIELD_ROUTE_COLLECTION_ID,
       RouteCollectionSearchIndexConstants.FIELD_ROUTE_SHORT_NAME,
-      RouteCollectionSearchIndexConstants.FIELD_ROUTE_LONG_NAME};
+      RouteCollectionSearchIndexConstants.FIELD_ROUTE_LONG_NAME,
+      RouteCollectionSearchIndexConstants.FIELD_ROUTE_DESCRIPTION
+  };
 
   private FederatedTransitDataBundle _bundle;
 
