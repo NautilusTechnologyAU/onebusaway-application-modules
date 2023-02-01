@@ -145,7 +145,7 @@ class StopsBeanServiceImpl implements StopsBeanService {
 
     SearchResult<AgencyAndId> stops;
     try {
-      stops = _searchService.searchForStopsByCode(query, 10, MIN_SCORE);
+      stops = _searchService.searchForStops(query, 10, MIN_SCORE);
     } catch (ParseException e) {
       throw new InvalidArgumentServiceException("query", "queryParseError");
     } catch (IOException e) {

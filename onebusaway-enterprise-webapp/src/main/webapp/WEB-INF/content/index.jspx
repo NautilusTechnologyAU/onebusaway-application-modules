@@ -48,8 +48,13 @@
 &lt;![endif]--&gt;
 </jsp:text>
 
+<script>
+	function dummy() {}
+	window.dummy=dummy;
+</script>
 <s:url var="url" value="https://maps.googleapis.com/maps/api/js">				
 	<s:param name="key"><s:property value="googleMapsApiKey" /></s:param>
+	<s:param name="callback">dummy</s:param>
 </s:url>
 <script src="${url}" type="text/javascript"><!-- //prevent jspx minimization --></script>
 
