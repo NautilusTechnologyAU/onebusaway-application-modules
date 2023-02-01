@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.google.transit.realtime.GtfsRealtime;
-import com.google.transit.realtime.GtfsRealtimeAdelaideMetro;
+import com.google.transit.realtime.GtfsRealtimeNSW;
 import org.apache.commons.lang.StringUtils;
 import org.onebusaway.collections.MappingLibrary;
 import org.onebusaway.collections.Min;
@@ -1116,8 +1116,8 @@ public class GtfsRealtimeTripLibrary {
     record.setVehicleId(new AgencyAndId(update.block.getBlockInstance().getBlock().getBlock().getId().getAgencyId(), update.block.getVehicleId()));
     if (update.vehiclePosition.hasVehicle()) {
       GtfsRealtime.VehicleDescriptor vd = update.vehiclePosition.getVehicle();
-      if (vd.hasExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor)) {
-        GtfsRealtimeAdelaideMetro.TfnswVehicleDescriptor desc = vd.getExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor);
+      if (vd.hasExtension(GtfsRealtimeNSW.tfnswVehicleDescriptor)) {
+        GtfsRealtimeNSW.TfnswVehicleDescriptor desc = vd.getExtension(GtfsRealtimeNSW.tfnswVehicleDescriptor);
         if (desc.hasWheelchairAccessible() && desc.getWheelchairAccessible() == 1) {
           record.setWheelchairAccessible(true);
         } else {
@@ -1128,8 +1128,31 @@ public class GtfsRealtimeTripLibrary {
         } else {
           record.setAirConditioned(false);
         }
+        // TODO: process extra attribute of NSW tfnswVehicleDescriptor
+        /*if (desc.hasVehicleModel()) {
+          record.setVehicleModel(desc.getVehicleModel());
+        } else {
+          record.setVehicleModel(null);
+        }
+        if (desc.hasPerformingPriorTrip()) {
+          record.setPerformingPriorTrip(desc.getPerformingPriorTrip());
+        } else {
+          record.setPerformingPriorTrip(false);
+        }
+        if (desc.hasSpecialVehicleAttributes()) {
+          record.setSpecialVehicleAttributes(desc.getSpecialVehicleAttributes());
+        } else {
+          record.setSpecialVehicleAttributes(0);
+        }*/
       }
     }
+
+    // TODO: process NSW CarriageDescriptor extension
+    /*List<GtfsRealtimeNSW.CarriageDescriptor> descList = update.vehiclePosition.getExtension(GtfsRealtimeNSW.consist);
+    if (descList != null) {
+      descList.forEach(carriageDescriptor -> {
+      });
+    }*/
 
     return record;
   }
