@@ -163,11 +163,11 @@ public class GtfsRealtimeTripLibrary {
    */
   public List<CombinedTripUpdatesAndVehiclePosition> groupTripUpdatesAndVehiclePositions(
       FeedMessage tripUpdateMessage, FeedMessage vehiclePositionsMessage) {
-    return groupTripUpdatesAndVehiclePositions(null, tripUpdateMessage, vehiclePositionsMessage);
+    return groupTripUpdatesAndVehiclePositions(null, tripUpdateMessage, vehiclePositionsMessage, true);
   }
   
   public List<CombinedTripUpdatesAndVehiclePosition> groupTripUpdatesAndVehiclePositions(MonitoredResult result,
-      FeedMessage tripUpdateMessage, FeedMessage vehiclePositionsMessage) {
+      FeedMessage tripUpdateMessage, FeedMessage vehiclePositionsMessage, boolean skipAnonymousUpdate) {
 
     List<CombinedTripUpdatesAndVehiclePosition> updates = new ArrayList<CombinedTripUpdatesAndVehiclePosition>();
     Map<String, TripUpdate> bestTripByVehicleId = new HashMap<String, TripUpdate>();
@@ -219,18 +219,20 @@ public class GtfsRealtimeTripLibrary {
 
         // if this block has an assigned vehicle skip this anonymous update
         // its likely for a future trip
-        TripEntry tripEntry = _entitySource.getTrip(td.getTripId());
-        if (tripEntry != null && tripEntry.getBlock() != null) {
-          String blockId = tripEntry.getBlock().getId().toString();
-          if (assignmentInfo.preferredVehicleByBlockId.containsKey(blockId)) {
-            String preferredVehicleId = assignmentInfo.preferredVehicleByBlockId.get(blockId);
-            if (!td.getTripId().equals(preferredVehicleId)) {
-              _log.info("skipping anonymous update " + td.getTripId()
-                      + " as a vehicle assignment exists for vehicle "
-              + assignmentInfo.preferredVehicleByBlockId.get(blockId)
-              + " for trip "
-              + assignmentInfo.preferredTripByVehicleId.get(preferredVehicleId));
-              continue;
+        if (skipAnonymousUpdate) {
+          TripEntry tripEntry = _entitySource.getTrip(td.getTripId());
+          if (tripEntry != null && tripEntry.getBlock() != null) {
+            String blockId = tripEntry.getBlock().getId().toString();
+            if (assignmentInfo.preferredVehicleByBlockId.containsKey(blockId)) {
+              String preferredVehicleId = assignmentInfo.preferredVehicleByBlockId.get(blockId);
+              if (!td.getTripId().equals(preferredVehicleId)) {
+                _log.info("skipping anonymous update " + td.getTripId()
+                        + " as a vehicle assignment exists for vehicle "
+                        + assignmentInfo.preferredVehicleByBlockId.get(blockId)
+                        + " for trip "
+                        + assignmentInfo.preferredTripByVehicleId.get(preferredVehicleId));
+                // continue;
+              }
             }
           }
         }

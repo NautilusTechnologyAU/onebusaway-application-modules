@@ -37,7 +37,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import com.google.transit.realtime.GtfsRealtime;
-import com.google.transit.realtime.GtfsRealtimeExtensions;
 import org.apache.commons.lang.StringUtils;
 import org.onebusaway.geospatial.model.CoordinatePoint;
 import org.onebusaway.geospatial.services.SphericalGeometryLibrary;
@@ -186,6 +185,8 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
 
   private String _alertSourcePrefix = null;
 
+  private boolean _skipAnonymousUpdate = true;
+
   @Autowired
   public void setAgencyService(AgencyService agencyService) {
     _agencyService = agencyService;
@@ -241,6 +242,10 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   @Autowired
   public void setBlockGeospatialService(BlockGeospatialService blockGeospatialService) {
     _blockGeospatialService = blockGeospatialService;
+  }
+
+  public void setSkipAnonymousUpdate(boolean skip) {
+    _skipAnonymousUpdate = skip;
   }
 
   public void setStopModificationStrategy(StopModificationStrategy strategy) {
@@ -344,6 +349,10 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   
   public List<String> getAgencyIds() {
     return _agencyIds;
+  }
+
+  public boolean getSkipAnonymousUpdate() {
+    return _skipAnonymousUpdate;
   }
 
   public void setMonitoredResult(MonitoredResult result) {
@@ -531,7 +540,7 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
 	_tripsLibrary.setCurrentTime(time);
 
     List<CombinedTripUpdatesAndVehiclePosition> combinedUpdates = _tripsLibrary.groupTripUpdatesAndVehiclePositions(result,
-            tripUpdates, vehiclePositions);
+            tripUpdates, vehiclePositions, _skipAnonymousUpdate);
     result.setRecordsTotal(combinedUpdates.size());
     handleCombinedUpdates(result, combinedUpdates);
     // cacheVehicleLocations(vehiclePositions);
@@ -628,7 +637,7 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
     }
     // NOTE: this implies receiving stale updates is equivalent to not being updated at all
     result.setLastUpdate(newestUpdate);
-    _log.info("Agency " + this.getAgencyIds().get(0) + " has active vehicles=" + seenVehicles.size()
+    _log.info("Agency " + this.getAgencyIds() + " have active vehicles=" + seenVehicles.size()
         + " for updates=" + updates.size() + " with most recent timestamp " + new Date(newestUpdate));
   }
 
