@@ -379,14 +379,15 @@ private void removeDuplicateStopTimes(List<StopTime> stopTimes) {
       departureTimes[i] = departureTime;
       arrivalTimes[i] = arrivalTime;
 
+//      if (departureTimes[i] < arrivalTimes[i])
+//        throw new IllegalStateException(
+//            "departure time is less than arrival time for stop time with trip_id="
+//                + stopTime.getTrip().getId() + " stop_sequence="
+//                + stopTime.getStopSequence());
       if (departureTimes[i] < arrivalTimes[i])
-        throw new IllegalStateException(
-            "departure time is less than arrival time for stop time with trip_id="
-                + stopTime.getTrip().getId() + " stop_sequence="
-                + stopTime.getStopSequence());
+        departureTimes[i] = arrivalTimes[i];
 
       if (i > 0 && arrivalTimes[i] < departureTimes[i - 1]) {
-
         /**
          * The previous stop time's departure time comes AFTER this stop time's
          * arrival time. That's bad.
