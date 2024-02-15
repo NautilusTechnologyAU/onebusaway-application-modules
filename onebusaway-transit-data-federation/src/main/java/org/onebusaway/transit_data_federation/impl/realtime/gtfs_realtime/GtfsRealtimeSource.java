@@ -70,7 +70,7 @@ import com.google.transit.realtime.GtfsRealtime.FeedHeader;
 import com.google.transit.realtime.GtfsRealtime.FeedMessage;
 import com.google.transit.realtime.GtfsRealtimeConstants;
 import com.google.transit.realtime.GtfsRealtimeOneBusAway;
-import com.google.transit.realtime.GtfsRealtimeNSW;
+import com.google.transit.realtime.GtfsRealtimeAdelaideMetro;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -90,7 +90,7 @@ public class GtfsRealtimeSource implements MonitoredDataSource {
   static {
     _registry.add(GtfsRealtimeOneBusAway.obaFeedEntity);
     _registry.add(GtfsRealtimeOneBusAway.obaTripUpdate);
-    _registry.add(GtfsRealtimeNSW.tfnswVehicleDescriptor);
+    _registry.add(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor);
   }
 
   private AgencyService _agencyService;

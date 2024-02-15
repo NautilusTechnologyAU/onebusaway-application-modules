@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.google.transit.realtime.GtfsRealtime;
-import com.google.transit.realtime.GtfsRealtimeNSW;
+import com.google.transit.realtime.GtfsRealtimeAdelaideMetro;
 import org.apache.commons.lang.StringUtils;
 import org.onebusaway.collections.MappingLibrary;
 import org.onebusaway.collections.Min;
@@ -1118,8 +1118,8 @@ public class GtfsRealtimeTripLibrary {
     record.setVehicleId(new AgencyAndId(update.block.getBlockInstance().getBlock().getBlock().getId().getAgencyId(), update.block.getVehicleId()));
     if (update.vehiclePosition.hasVehicle()) {
       GtfsRealtime.VehicleDescriptor vd = update.vehiclePosition.getVehicle();
-      if (vd.hasExtension(GtfsRealtimeNSW.tfnswVehicleDescriptor)) {
-        GtfsRealtimeNSW.TfnswVehicleDescriptor desc = vd.getExtension(GtfsRealtimeNSW.tfnswVehicleDescriptor);
+      if (vd.hasExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor)) {
+        GtfsRealtimeAdelaideMetro.TfnswVehicleDescriptor desc = vd.getExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor);
         if (desc.hasWheelchairAccessible() && desc.getWheelchairAccessible() == 1) {
           record.setWheelchairAccessible(true);
         } else {
