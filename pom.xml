@@ -123,10 +123,11 @@
 
   <!-- releases and snapshots should be inherited -->
   <distributionManagement>
-    <site>
+    <repository>
       <id>github</id>
+      <name>GitHub Packages</name>
       <url>https://maven.pkg.github.com/nautilustechnologyau/onebusaway-application-modules</url>
-    </site>
+    </repository>    
   </distributionManagement>
   <modules>
     <module>onebusaway-admin-webapp</module>
