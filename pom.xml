@@ -17,7 +17,7 @@
 
   <!-- Common Software Dependency Versions -->
   <properties>
-    <project-version>2.1.17</project-version>
+    <project-version>2.1.17-nsw</project-version>
     <project.scm.id>github</project.scm.id>
     <asm-version>8.0.1</asm-version>
     <struts-version>2.5.31</struts-version>

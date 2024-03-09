@@ -24,7 +24,7 @@ env:
   SERVER_PORT: 8080
   LOCATION: 'Australia East'
   TIME_ZONE: 'Australia/Adelaide'
-  RELEASE_BRANCH: 'refs/heads/mymetro'
+  RELEASE_BRANCH: 'refs/heads/mymetro_nsw'
 
 jobs:
   build_and_test:
