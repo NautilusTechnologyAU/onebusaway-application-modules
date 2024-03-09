@@ -48,14 +48,10 @@ public class TestVehicleLocationListener implements VehicleLocationListener {
     _listener.resetVehicleLocation(vehicleId);
   }
 
-  @Override
-  public void handleRawPosition(AgencyAndId vehicleId, double lat, double lon, long timestamp) {
-
-  }
-
   public List<VehicleLocationRecord> getRecords() {
     return _records;
   }
+  
   @Override
   public void handleRawPosition(AgencyAndId vehicleId, double lat, double lon, long timestamp, float speed,
       double odometer, float bearing) {
