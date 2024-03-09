@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.transit.realtime.GtfsRealtime;
-import com.google.transit.realtime.GtfsRealtimeAdelaideMetro;
+import com.google.transit.realtime.GtfsRealtimeNSW;
 import com.google.transit.realtime.GtfsRealtimeMTARR;
 import com.google.transit.realtime.GtfsRealtimeNYCT;
 import org.apache.commons.lang.StringUtils;
@@ -62,6 +62,7 @@ import com.google.transit.realtime.GtfsRealtime.TripUpdate;
 import com.google.transit.realtime.GtfsRealtime.TripUpdate.StopTimeEvent;
 import com.google.transit.realtime.GtfsRealtime.TripUpdate.StopTimeUpdate;
 import com.google.transit.realtime.GtfsRealtime.VehiclePosition;
+import com.google.transit.realtime.GtfsRealtimeNSW;
 
 public class GtfsRealtimeTripLibrary {
 
@@ -1434,8 +1435,8 @@ public class GtfsRealtimeTripLibrary {
     record.setVehicleId(new AgencyAndId(update.block.getBlockInstance().getBlock().getBlock().getId().getAgencyId(), update.block.getVehicleId()));
     if (update.vehiclePosition.hasVehicle()) {
       GtfsRealtime.VehicleDescriptor vd = update.vehiclePosition.getVehicle();
-      if (vd.hasExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor)) {
-        GtfsRealtimeAdelaideMetro.TfnswVehicleDescriptor desc = vd.getExtension(GtfsRealtimeAdelaideMetro.tfnswVehicleDescriptor);
+      if (vd.hasExtension(GtfsRealtimeNSW.tfnswVehicleDescriptor)) {
+        GtfsRealtimeNSW.TfnswVehicleDescriptor desc = vd.getExtension(GtfsRealtimeNSW.tfnswVehicleDescriptor);
         if (desc.hasWheelchairAccessible() && desc.getWheelchairAccessible() == 1) {
           record.setWheelchairAccessible(true);
         } else {
