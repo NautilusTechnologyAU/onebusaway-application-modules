@@ -24,6 +24,7 @@ env:
   SERVER_PORT: 8080
   LOCATION: 'Australia East'
   TIME_ZONE: 'Australia/Adelaide'
+  RELEASE_BRANCH: 'refs/heads/mymetro'
 
 jobs:
   build_and_test:
@@ -96,31 +97,31 @@ jobs:
           echo "::set-output name=image_tag::${{ env.IMAGE_TAG }}"
           echo "::set-output name=project_version::${{ env.PROJECT_VERSION }}"
 
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # - name: Azure Login
+      #   uses: azure/login@v1
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Docker Login [Azure]
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
+      # - name: Docker Login [Azure]
+      #   uses: azure/docker-login@v1
+      #   with:
+      #     login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+      #     username: ${{ secrets.REGISTRY_USERNAME }}
+      #     password: ${{ secrets.REGISTRY_PASSWORD }}
 
-      - name: Docker Build and Push - onebusaway-twilio-webapp
-        if: github.event_name != 'pull_request'
-        run: |
-          docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./onebusaway-twilio-webapp
-          docker tag ${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      # - name: Docker Build and Push - onebusaway-twilio-webapp
+      #   if: github.event_name != 'pull_request'
+      #   run: |
+      #     docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./onebusaway-twilio-webapp
+      #     docker tag ${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      #     docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_PHONE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-      - name: Docker Build and Push - onebusaway-sms-webapp
-        if: github.event_name != 'pull_request'
-        run: |
-          docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./onebusaway-sms-webapp
-          docker tag ${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      # - name: Docker Build and Push - onebusaway-sms-webapp
+      #   if: github.event_name != 'pull_request'
+      #   run: |
+      #     docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./onebusaway-sms-webapp
+      #     docker tag ${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      #     docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.TWILIO_SMS_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
 #      - name: Docker Build and Push - onebusaway-admin-webapp
 #        if: github.event_name != 'pull_request'
@@ -129,22 +130,22 @@ jobs:
 #          docker tag ${{ env.ADMIN_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.ADMIN_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 #          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.ADMIN_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-      - name: Docker Build and Push - onebusaway-enterprise-acta-webapp
-        if: github.event_name != 'pull_request'
-        run: |
-          docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./onebusaway-enterprise-acta-webapp
-          docker tag ${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      # - name: Docker Build and Push - onebusaway-enterprise-acta-webapp
+      #   if: github.event_name != 'pull_request'
+      #   run: |
+      #     docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./onebusaway-enterprise-acta-webapp
+      #     docker tag ${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      #     docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.ENTERPRISE_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-      - name: Docker Build and Push - onebusaway-combined-webapps
-        if: github.event_name != 'pull_request'
-        run: |
-          docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./
-          docker tag ${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      # - name: Docker Build and Push - onebusaway-combined-webapps
+      #   if: github.event_name != 'pull_request'
+      #   run: |
+      #     docker build --build-arg VERSION=${{ env.IMAGE_TAG }} -t ${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ./
+      #     docker tag ${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      #     docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.COMBINED_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
       - name: Create Tag
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == env.RELEASE_BRANCH
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.CICD_TOKEN }}
@@ -157,8 +158,8 @@ jobs:
               sha: context.sha
             })
 
-      - name: Create release
-        if: github.ref == 'refs/heads/master'
+      - name: Create Release
+        if: github.ref == env.RELEASE_BRANCH
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
