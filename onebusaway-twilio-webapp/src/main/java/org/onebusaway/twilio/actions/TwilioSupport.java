@@ -22,7 +22,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-import com.opensymphony.xwork2.util.StrutsLocalizedTextProvider;
+import com.opensymphony.xwork2.*;
+import com.opensymphony.xwork2.inject.Inject;
 import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.onebusaway.geospatial.model.CoordinateBounds;
@@ -37,8 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.util.StrutsLocalizedTextProvider;
 import com.opensymphony.xwork2.util.ValueStack;
 
 public class TwilioSupport extends ActionSupport implements ParameterAware, CurrentUserAware, SessionAware {
@@ -71,23 +71,38 @@ public class TwilioSupport extends ActionSupport implements ParameterAware, Curr
   }
 
   protected void addMessage(String msg) {
-    _log.debug(msg);
-    _message.append(" " + getText(msg) + " ");
+    String value = getLocalText(msg);
+    _log.debug(msg + " = " + value);
+    _message.append(" " + value + " ");
   }
 
-  protected void clearMessage() {
-    _message.delete(0, _message.length());
+  private String getLocalText(String msg) {
+    ActionContext context = ActionContext.getContext();
+    Locale locale = context.getLocale();
+    ValueStack valueStack = context.getValueStack();
+    String text = _textProvider.findText(TwilioSupport.this.getClass(), msg, locale, msg, null, valueStack);
+    _log.debug(msg + " = " + text + " with stack=" + valueStack);
+    return text;
   }
 
   protected String getLocalisedText(String msg, Object... args) {
     ActionContext context = ActionContext.getContext();
     Locale locale = context.getLocale();
     ValueStack valueStack = context.getValueStack();
-    return new StrutsLocalizedTextProvider().findText(TwilioSupport.this.getClass(), msg, locale, msg, args, valueStack);
+    return _textProvider.findText(TwilioSupport.this.getClass(), msg, locale, msg, args, valueStack);
+  }
+
+  protected void clearMessage() {
+    _message.delete(0, _message.length());
   }
 
   protected void addMessage(String msg, Object... args) {
-    String text = getLocalisedText(msg, args);
+    _log.debug("addMessage(" + msg + ") and args=" + args);
+    ActionContext context = ActionContext.getContext();
+    Locale locale = context.getLocale();
+    ValueStack valueStack = context.getValueStack();
+
+    String text = _textProvider.findText(TwilioSupport.this.getClass(), msg, locale, msg, args, valueStack);
     _log.debug("message: " + text);
     _message.append(" " + text + " ");
     _log.debug(getText(msg));
@@ -197,6 +212,9 @@ public class TwilioSupport extends ActionSupport implements ParameterAware, Curr
   public void setCurrentUser(UserBean currentUser) {
     _currentUser = currentUser;
   }
+
+  @Inject
+  private LocalizedTextProvider _textProvider;
 
   public UserBean getCurrentUser() {
     return _currentUser;

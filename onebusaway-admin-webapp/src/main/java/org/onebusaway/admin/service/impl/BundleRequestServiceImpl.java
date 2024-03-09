@@ -57,7 +57,7 @@ public class BundleRequestServiceImpl implements BundleRequestService, ServletCo
   @Autowired
   private BundleBuildingService _bundleService;
 
-  @Autowired
+  @Autowired(required = false)
   public void setEmailService(EmailService service) {
     _emailService = service;
   }
@@ -70,6 +70,14 @@ public class BundleRequestServiceImpl implements BundleRequestService, ServletCo
   @PostConstruct
   public void setup() {
     _executorService = Executors.newFixedThreadPool(1);
+  }
+
+  @PostConstruct
+  public void shutdown() {
+    if (_executorService != null) {
+      _executorService.shutdownNow();
+      _executorService = null;
+    }
   }
 
   public void setInstanceId(String instanceId) {
@@ -146,7 +154,8 @@ public class BundleRequestServiceImpl implements BundleRequestService, ServletCo
     	msg.append(getResultLink(request.getBundleName(), response.getId(),
     			request.getBundleStartDateString(), request.getBundleEndDateString()));
     	String subject = "Bundle Build " + response.getId() + " complete";
-    	_emailService.send(request.getEmailAddress(), from, subject, msg);
+      if (_emailService != null)
+    	  _emailService.send(request.getEmailAddress(), from, subject, msg);
     }
   }
   

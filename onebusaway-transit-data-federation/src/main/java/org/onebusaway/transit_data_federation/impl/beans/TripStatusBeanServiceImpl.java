@@ -21,11 +21,14 @@ import org.onebusaway.gtfs.model.AgencyAndId;
 import org.onebusaway.realtime.api.*;
 import org.onebusaway.transit_data.model.ListBean;
 import org.onebusaway.transit_data.model.StopBean;
+import org.onebusaway.transit_data.model.TransitDataConstants;
 import org.onebusaway.transit_data.model.TripStopTimesBean;
 import org.onebusaway.transit_data.model.schedule.FrequencyBean;
 import org.onebusaway.transit_data.model.service_alerts.ServiceAlertBean;
 import org.onebusaway.transit_data.model.trips.*;
 import org.onebusaway.transit_data_federation.impl.realtime.apc.VehicleOccupancyRecordCache;
+import org.onebusaway.transit_data_federation.model.transit_graph.DynamicGraph;
+import org.onebusaway.transit_data_federation.services.ArrivalAndDepartureService;
 import org.onebusaway.transit_data_federation.impl.realtime.tfnsw.TfnswVehicleDescriptorRecordCache;
 import org.onebusaway.transit_data_federation.services.beans.*;
 import org.onebusaway.transit_data_federation.services.blocks.BlockInstance;
@@ -52,6 +55,8 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
 
   private TransitGraphDao _transitGraphDao;
 
+  private DynamicGraph _dynamicGraph;
+
   private BlockStatusService _blockStatusService;
 
   private TripBeanService _tripBeanService;
@@ -68,9 +73,16 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
 
   private VehicleLocationRecordCache _vehicleLocationRecordCache;
 
+  private ArrivalAndDepartureService _arrivalAndDepartureService;
+
   @Autowired
   public void setTransitGraphDao(TransitGraphDao transitGraphDao) {
     _transitGraphDao = transitGraphDao;
+  }
+
+  @Autowired
+  public void setDynamicGraph(DynamicGraph dynamicGraph) {
+    _dynamicGraph = dynamicGraph;
   }
 
   @Autowired
@@ -104,6 +116,11 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
   public void setVehicleOccupancyRecordCache(VehicleOccupancyRecordCache cache) {
     this._vehicleOccupancyRecordCache = cache;
   }
+  @Autowired
+  public void setArrivalAndDepartureService(ArrivalAndDepartureService arrivalAndDepartureService) {
+    this._arrivalAndDepartureService = arrivalAndDepartureService;
+  }
+
 
   @Autowired
   public void setTfnswVehicleDescriptorRecordCache(TfnswVehicleDescriptorRecordCache cache) {
@@ -146,6 +163,9 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
     long time = query.getTime();
 
     TripEntry tripEntry = _transitGraphDao.getTripEntryForId(tripId);
+    if (tripEntry == null) {
+      tripEntry = _dynamicGraph.getTripEntryForId(tripId);
+    }
     if (tripEntry == null)
       return new ListBean<TripDetailsBean>();
 
@@ -231,6 +251,13 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
 
     TripStatusBean bean = new TripStatusBean();
     bean.setStatus("default");
+    if (TransitDataConstants.STATUS_CANCELED.equals(blockLocation.getStatus())) {
+      if (_arrivalAndDepartureService.getHideCanceledTrips()) {
+        // if we are configured to hide canceled trips, then this bean should be null
+        return null;
+      }
+      bean.setStatus(TransitDataConstants.STATUS_CANCELED);
+    }
 
     BlockInstance blockInstance = blockLocation.getBlockInstance();
     long serviceDate = blockInstance.getServiceDate();
@@ -266,7 +293,12 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
       TripBean activeTripBean = _tripBeanService.getTripForId(activeTrip.getId());
       bean.setActiveTrip(activeTripBean);
       bean.setBlockTripSequence(activeBlockTrip.getSequence());
-
+      StopTimeEntry firstStop = activeBlockTrip.getTrip().getStopTimes().get(0);
+      if (firstStop.getArrivalTime() > 0) {
+        bean.setTripStartTime(firstStop.getArrivalTime());
+      } else if (firstStop.getDepartureTime() > 0) {
+        bean.setTripStartTime(firstStop.getDepartureTime());
+      }
       if (blockLocation.isLastKnownDistanceAlongBlockSet()) {
         bean.setLastKnownDistanceAlongTrip(blockLocation.getLastKnownDistanceAlongBlock()
             - activeBlockTrip.getDistanceAlongBlock());
@@ -347,6 +379,7 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
         }
 
         tpb.setTimepointId(tpr.getTimepointId().toString());
+        // This may not be the expected trip (returning entire block now)
         tpb.setTripId(tpr.getTripId().toString());
         tpb.setStopSequence(tpr.getStopSequence());
         tpb.setTimepointPredictedArrivalTime(tpr.getTimepointPredictedArrivalTime());
@@ -393,8 +426,10 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
     List<TripDetailsBean> tripDetails = new ArrayList<TripDetailsBean>();
     for (BlockLocation location : locations) {
       TripDetailsBean details = getBlockLocationAsTripDetails(
-          location.getActiveTripInstance(), location, inclusion, time);
-      tripDetails.add(details);
+              location.getActiveTripInstance(), location, inclusion, time);
+      if (tripDetails != null) {
+        tripDetails.add(details);
+      }
     }
     return new ListBean<TripDetailsBean>(tripDetails, false);
   }
@@ -446,7 +481,8 @@ public class TripStatusBeanServiceImpl implements TripDetailsBeanService {
     }
     if (inclusion.isIncludeTripStatus() && blockLocation != null) {
       status = getBlockLocationAsStatusBean(blockLocation, time);
-      vehicleId = AgencyAndIdLibrary.convertFromString(status.getVehicleId());
+      if (status != null)
+        vehicleId = AgencyAndIdLibrary.convertFromString(status.getVehicleId());
     }
 
     List<ServiceAlertBean> situations = _serviceAlertBeanService.getServiceAlertsForVehicleJourney(

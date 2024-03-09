@@ -92,7 +92,7 @@
         init-method="init">
       <property name="username" value="operator"/>
       <property name="password" value="${OPERATOR_PASSWORD}"/>
-        <property name="role" value="ROLE_OPERATOR"/>
+      <property name="role" value="ROLE_OPERATOR"/>
     </bean>
     
     <sec:http auto-config="false" entry-point-ref="loginUrlAuthenticationEntryPoint">
@@ -149,8 +149,9 @@
    <bean id="diffService" class="org.onebusaway.admin.service.impl.DiffServiceImpl" >
      <property name="configurationServiceClient" ref="configurationServiceClient" />
    </bean>
-  
-   <bean id="emailService" class="org.onebusaway.admin.service.impl.EmailServiceImpl" />
+
+    <!-- this requires mail.jar be added to tomcat -->
+<!--   <bean id="emailService" class="org.onebusaway.admin.service.impl.EmailServiceImpl" />-->
       
    <bean id="bundleRequestService" class="org.onebusaway.admin.service.impl.BundleRequestServiceImpl" />
       
